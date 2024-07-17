@@ -2,43 +2,37 @@ import 'package:flutter/material.dart';
 import 'package:kitchen/constants.dart';
 import 'package:kitchen/screen/components/category_filter.dart';
 
-class BuildAppbar extends StatefulWidget implements PreferredSizeWidget {
-  const BuildAppbar({Key? key}) : super(key: key);
+class BuildAppbar extends StatelessWidget implements PreferredSizeWidget {
+  final int selectedIndex;
+  final Function(int) onItemTapped;
+  final String selectedCategory;
+  final Function(String) onCategoryChanged;
+
+  const BuildAppbar({
+    Key? key,
+    required this.selectedIndex,
+    required this.onItemTapped,
+    required this.selectedCategory,
+    required this.onCategoryChanged,
+  }) : super(key: key);
 
   @override
-  _AppbarSectionState createState() => _AppbarSectionState();
-
-  @override
-  Size get preferredSize => Size.fromHeight(100); // Set the preferred size for the AppBar
-}
-
-class _AppbarSectionState extends State<BuildAppbar> {
-  bool isFirstSelected = true;
-  String _selectedCategory = 'Semua'; // Nilai awal dropdown
-  List<String> _categories = [
-    'Semua',
-    'Makanan',
-    'Minuman',
-    'Snack',
-    'Item'
-  ]; // Daftar pilihan dropdown
+  Size get preferredSize => const Size.fromHeight(100);
 
   @override
   Widget build(BuildContext context) {
-    var categoryFilter = CategoryFilter.of(context);
-
     return AppBar(
       backgroundColor: HeaderColor,
       toolbarHeight: 100,
       title: Row(
         children: [
-          SizedBox(width: 10),
+          const SizedBox(width: 10),
           Padding(
             padding: const EdgeInsets.all(20),
             child: Container(
               width: 50,
               height: 50,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 shape: BoxShape.circle,
                 image: DecorationImage(
                   image: AssetImage("assets/images/kitchenlogo.jpg"),
@@ -47,7 +41,7 @@ class _AppbarSectionState extends State<BuildAppbar> {
               ),
             ),
           ),
-          Text(
+          const Text(
             "Kitchen",
             style: TextStyle(
               fontSize: 40,
@@ -70,17 +64,17 @@ class _AppbarSectionState extends State<BuildAppbar> {
               child: Padding(
                 padding: const EdgeInsets.only(left: 8),
                 child: DropdownButton<String>(
-                  value: _selectedCategory,
+                  value: selectedCategory,
                   onChanged: (String? newValue) {
-                    setState(() {
-                      _selectedCategory = newValue!;
-                      categoryFilter?.onCategoryChanged(_selectedCategory);
-                    });
+                    if (newValue != null) {
+                      onCategoryChanged(newValue);
+                    }
                   },
                   underline: const SizedBox(),
                   borderRadius: BorderRadius.circular(10),
                   isExpanded: true,
-                  items: _categories.map<DropdownMenuItem<String>>((String value) {
+                  items: ['Semua', 'Makanan', 'Minuman', 'Snack', 'Item']
+                      .map<DropdownMenuItem<String>>((String value) {
                     return DropdownMenuItem<String>(
                       value: value,
                       child: Text(value),
@@ -104,19 +98,17 @@ class _AppbarSectionState extends State<BuildAppbar> {
                 selectedColor: Colors.white,
                 color: Colors.white,
                 borderWidth: 1,
-                isSelected: [isFirstSelected, !isFirstSelected],
+                isSelected: [selectedIndex == 0, selectedIndex == 1],
                 onPressed: (int index) {
-                  setState(() {
-                    isFirstSelected = index == 0;
-                  });
+                  onItemTapped(index);
                 },
                 children: <Widget>[
                   Container(
                     width: 100,
                     height: 60,
                     decoration: BoxDecoration(
-                      color: isFirstSelected ? Colors.green : Colors.white,
-                      borderRadius: BorderRadius.only(
+                      color: selectedIndex == 0 ? Colors.green : Colors.white,
+                      borderRadius: const BorderRadius.only(
                         topLeft: Radius.circular(16),
                         bottomLeft: Radius.circular(16),
                       ),
@@ -125,7 +117,7 @@ class _AppbarSectionState extends State<BuildAppbar> {
                       child: Text(
                         'Order',
                         style: TextStyle(
-                          color: isFirstSelected ? Colors.white : Colors.black,
+                          color: selectedIndex == 0 ? Colors.white : Colors.black,
                           fontSize: 16,
                         ),
                       ),
@@ -135,8 +127,8 @@ class _AppbarSectionState extends State<BuildAppbar> {
                     width: 100,
                     height: 60,
                     decoration: BoxDecoration(
-                      color: !isFirstSelected ? Colors.blue : Colors.white,
-                      borderRadius: BorderRadius.only(
+                      color: selectedIndex == 1 ? Colors.blue : Colors.white,
+                      borderRadius: const BorderRadius.only(
                         topRight: Radius.circular(16),
                         bottomRight: Radius.circular(16),
                       ),
@@ -145,7 +137,7 @@ class _AppbarSectionState extends State<BuildAppbar> {
                       child: Text(
                         'Selesai',
                         style: TextStyle(
-                          color: !isFirstSelected ? Colors.white : Colors.black,
+                          color: selectedIndex == 1 ? Colors.white : Colors.black,
                           fontSize: 16,
                         ),
                       ),
@@ -164,7 +156,7 @@ class _AppbarSectionState extends State<BuildAppbar> {
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(16),
               ),
-              child: Icon(
+              child: const Icon(
                 Icons.refresh,
                 color: Colors.black,
                 size: 30,
@@ -180,7 +172,7 @@ class _AppbarSectionState extends State<BuildAppbar> {
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(16),
               ),
-              child: Icon(
+              child: const Icon(
                 Icons.settings,
                 color: Colors.black,
                 size: 30,
