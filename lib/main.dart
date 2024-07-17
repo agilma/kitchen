@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kitchen/screen/test.dart';
 import 'screen/order/order_screen.dart';
 
 void main() {
@@ -16,7 +17,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: OrderScreen(),
+      home: Test(),
     );
   }
 }
