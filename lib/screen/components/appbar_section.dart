@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kitchen/constants.dart';
+import 'package:kitchen/screen/components/category_filter.dart';
 
 class BuildAppbar extends StatefulWidget implements PreferredSizeWidget {
   const BuildAppbar({Key? key}) : super(key: key);
@@ -24,6 +25,8 @@ class _AppbarSectionState extends State<BuildAppbar> {
 
   @override
   Widget build(BuildContext context) {
+    var categoryFilter = CategoryFilter.of(context);
+
     return AppBar(
       backgroundColor: HeaderColor,
       toolbarHeight: 100,
@@ -71,6 +74,7 @@ class _AppbarSectionState extends State<BuildAppbar> {
                   onChanged: (String? newValue) {
                     setState(() {
                       _selectedCategory = newValue!;
+                      categoryFilter?.onCategoryChanged(_selectedCategory);
                     });
                   },
                   underline: const SizedBox(),
