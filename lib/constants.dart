@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 
 const HeaderColor = Color(0xFFE75959);
-const OrderStatusColor = Colors.green;
-const DoneStatusColor = Colors.blue;
-const SecondaryColor = Color(0xCACFD2);
+const OrderStatusColor = Color(0xFF607D8B );
+const DoneStatusColor = Color(0xFF388E3C);
 
 const double HeaderOrder = 22;
 const double SecondHeader = 18;

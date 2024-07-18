@@ -17,13 +17,13 @@ class BuildAppbar extends StatelessWidget implements PreferredSizeWidget {
   }) : super(key: key);
 
   @override
-  Size get preferredSize => const Size.fromHeight(100);
+  Size get preferredSize => const Size.fromHeight(70);
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
       backgroundColor: HeaderColor,
-      toolbarHeight: 100,
+      toolbarHeight: 70,
       title: Row(
         children: [
           const SizedBox(width: 10),
@@ -46,7 +46,7 @@ class BuildAppbar extends StatelessWidget implements PreferredSizeWidget {
             style: TextStyle(
               fontSize: 40,
               fontWeight: FontWeight.w600,
-              color: Colors.white,
+              color: Color(0xFFFEFEFE),
             ),
           ),
           Padding(
@@ -54,7 +54,7 @@ class BuildAppbar extends StatelessWidget implements PreferredSizeWidget {
             child: Container(
               width: 200,
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: Color(0xFFFEFEFE),
                 border: Border.all(
                   color: Colors.transparent,
                   width: 1,
@@ -95,8 +95,8 @@ class BuildAppbar extends StatelessWidget implements PreferredSizeWidget {
               child: ToggleButtons(
                 borderRadius: BorderRadius.circular(16),
                 fillColor: Colors.transparent,
-                selectedColor: Colors.white,
-                color: Colors.white,
+                selectedColor: Color(0xFFFEFEFE),
+                color: Color(0xFFFEFEFE),
                 borderWidth: 1,
                 isSelected: [selectedIndex == 0, selectedIndex == 1],
                 onPressed: (int index) {
@@ -107,7 +107,7 @@ class BuildAppbar extends StatelessWidget implements PreferredSizeWidget {
                     width: 100,
                     height: 60,
                     decoration: BoxDecoration(
-                      color: selectedIndex == 0 ? Colors.green : Colors.white,
+                      color: selectedIndex == 0 ? OrderStatusColor : Color(0xFFFEFEFE),
                       borderRadius: const BorderRadius.only(
                         topLeft: Radius.circular(16),
                         bottomLeft: Radius.circular(16),
@@ -117,7 +117,7 @@ class BuildAppbar extends StatelessWidget implements PreferredSizeWidget {
                       child: Text(
                         'Order',
                         style: TextStyle(
-                          color: selectedIndex == 0 ? Colors.white : Colors.black,
+                          color: selectedIndex == 0 ? Color(0xFFFEFEFE) : Colors.black,
                           fontSize: 16,
                         ),
                       ),
@@ -127,7 +127,7 @@ class BuildAppbar extends StatelessWidget implements PreferredSizeWidget {
                     width: 100,
                     height: 60,
                     decoration: BoxDecoration(
-                      color: selectedIndex == 1 ? Colors.blue : Colors.white,
+                      color: selectedIndex == 1 ? DoneStatusColor : Color(0xFFFEFEFE),
                       borderRadius: const BorderRadius.only(
                         topRight: Radius.circular(16),
                         bottomRight: Radius.circular(16),
@@ -137,7 +137,7 @@ class BuildAppbar extends StatelessWidget implements PreferredSizeWidget {
                       child: Text(
                         'Selesai',
                         style: TextStyle(
-                          color: selectedIndex == 1 ? Colors.white : Colors.black,
+                          color: selectedIndex == 1 ? Color(0xFFFEFEFE) : Colors.black,
                           fontSize: 16,
                         ),
                       ),
@@ -148,12 +148,12 @@ class BuildAppbar extends StatelessWidget implements PreferredSizeWidget {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(left: 70),
+            padding: const EdgeInsets.only(left: 130),
             child: Container(
               height: 60,
               width: 60,
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: Color(0xFFFEFEFE),
                 borderRadius: BorderRadius.circular(16),
               ),
               child: const Icon(
@@ -169,7 +169,7 @@ class BuildAppbar extends StatelessWidget implements PreferredSizeWidget {
               height: 60,
               width: 60,
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: Color(0xFFFEFEFE),
                 borderRadius: BorderRadius.circular(16),
               ),
               child: const Icon(

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:kitchen/screen/components/appbar_section.dart';
 import 'package:kitchen/screen/order/order_screen.dart';
 import 'package:kitchen/screen/done/done_screen.dart';
+import 'package:kitchen/screen/test.dart';
 
 void main() {
   runApp(const MyApp());
@@ -17,7 +18,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const HomeScreen(),
+      home: HomeScreen(),
     );
   }
 }
