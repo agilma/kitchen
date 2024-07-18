@@ -44,7 +44,7 @@ class BuildAppbar extends StatelessWidget implements PreferredSizeWidget {
           const Text(
             "Kitchen",
             style: TextStyle(
-              fontSize: 40,
+              fontSize: 50,
               fontWeight: FontWeight.w600,
               color: Color(0xFFFEFEFE),
             ),
@@ -64,6 +64,7 @@ class BuildAppbar extends StatelessWidget implements PreferredSizeWidget {
               child: Padding(
                 padding: const EdgeInsets.only(left: 8),
                 child: DropdownButton<String>(
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400),
                   value: selectedCategory,
                   onChanged: (String? newValue) {
                     if (newValue != null) {
@@ -107,7 +108,9 @@ class BuildAppbar extends StatelessWidget implements PreferredSizeWidget {
                     width: 100,
                     height: 60,
                     decoration: BoxDecoration(
-                      color: selectedIndex == 0 ? OrderStatusColor : Color(0xFFFEFEFE),
+                      color: selectedIndex == 0
+                          ? OrderStatusColor
+                          : Color(0xFFFEFEFE),
                       borderRadius: const BorderRadius.only(
                         topLeft: Radius.circular(16),
                         bottomLeft: Radius.circular(16),
@@ -117,9 +120,11 @@ class BuildAppbar extends StatelessWidget implements PreferredSizeWidget {
                       child: Text(
                         'Order',
                         style: TextStyle(
-                          color: selectedIndex == 0 ? Color(0xFFFEFEFE) : Colors.black,
-                          fontSize: 16,
-                        ),
+                            color: selectedIndex == 0
+                                ? Color(0xFFFEFEFE)
+                                : Colors.black,
+                            fontSize: 18,
+                            fontWeight: FontWeight.w400),
                       ),
                     ),
                   ),
@@ -127,7 +132,9 @@ class BuildAppbar extends StatelessWidget implements PreferredSizeWidget {
                     width: 100,
                     height: 60,
                     decoration: BoxDecoration(
-                      color: selectedIndex == 1 ? DoneStatusColor : Color(0xFFFEFEFE),
+                      color: selectedIndex == 1
+                          ? DoneStatusColor
+                          : Color(0xFFFEFEFE),
                       borderRadius: const BorderRadius.only(
                         topRight: Radius.circular(16),
                         bottomRight: Radius.circular(16),
@@ -137,9 +144,11 @@ class BuildAppbar extends StatelessWidget implements PreferredSizeWidget {
                       child: Text(
                         'Selesai',
                         style: TextStyle(
-                          color: selectedIndex == 1 ? Color(0xFFFEFEFE) : Colors.black,
-                          fontSize: 16,
-                        ),
+                            color: selectedIndex == 1
+                                ? Color(0xFFFEFEFE)
+                                : Colors.black,
+                            fontSize: 18,
+                            fontWeight: FontWeight.w400),
                       ),
                     ),
                   ),
@@ -159,7 +168,7 @@ class BuildAppbar extends StatelessWidget implements PreferredSizeWidget {
               child: const Icon(
                 Icons.refresh,
                 color: Colors.black,
-                size: 30,
+                size: 37,
               ),
             ),
           ),
@@ -175,7 +184,7 @@ class BuildAppbar extends StatelessWidget implements PreferredSizeWidget {
               child: const Icon(
                 Icons.settings,
                 color: Colors.black,
-                size: 30,
+                size: 37,
               ),
             ),
           ),
