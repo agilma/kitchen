@@ -41,7 +41,7 @@ class DoneItem extends StatelessWidget {
                   Text(
                     subtitle,
                     style: TextStyle(
-                      color: Colors.grey[600],
+                      color: Color.fromARGB(255, 20, 25, 27),
                       fontSize: 14.0,
                     ),
                   ),

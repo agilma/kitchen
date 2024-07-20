@@ -27,19 +27,19 @@ class _OrderCardState extends State<OrderCard> {
       child: Center(
         child: Wrap(
           alignment: WrapAlignment.start,
-          spacing: 12.0,
-          runSpacing: 12.0,
+          spacing: 4.0,
+          runSpacing: 10.0,
           children: List.generate(orderData.length, (index) {
             var order = orderData[index];
             bool shouldDisplay = widget.selectedCategory == 'Semua' ||
                 orderContainsType(order, widget.selectedCategory);
             return shouldDisplay
                 ? Padding(
-                    padding: const EdgeInsets.all(3.0),
+                    padding: const EdgeInsets.all(4.0),
                     child: Container(
                       width: MediaQuery.of(context).size.width / 3 - 16, // Mengatur lebar card
                       child: Card(
-                        elevation: 4,
+                        elevation: 8,
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -59,7 +59,7 @@ class _OrderCardState extends State<OrderCard> {
                                         style: const TextStyle(
                                           color: Colors.white,
                                           fontWeight: FontWeight.bold,
-                                          fontSize: 22.0,
+                                          fontSize: 28.0,
                                         ),
                                       ),
                                       Text(
@@ -126,8 +126,8 @@ class _OrderCardState extends State<OrderCard> {
                                 child: const Text(
                                   'Mark Done',
                                   style: TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 14,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16,
                                   ),
                                 ),
                                 style: ElevatedButton.styleFrom(

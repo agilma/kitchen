@@ -11,7 +11,6 @@ List<Map<String, dynamic>> orderData = [
       {'quantity': 1, 'item': 'Ayam Kung Pao', 'description': 'Pedas', 'type': 'Makanan'},
       {'quantity': 2, 'item': 'Teh Oolong', 'description': 'Panas', 'type': 'Minuman'},
       {'quantity': 3, 'item': 'Nasi Putih', 'description': '', 'type': 'Item'},
-
     ]
   },
   {
@@ -150,6 +149,22 @@ List<Map<String, dynamic>> orderData = [
   {
     'id_orderan': 'ORD012',
     'queue': 012,
+    'time': '19:00',
+    'status': 'Order',
+    'table': 'Table 12',
+    'name': 'Lucy Liu',
+    'items': [
+      {'quantity': 1, 'item': 'Sapi Lada Hitam', 'description': 'Pedas', 'type': 'Makanan'},
+      {'quantity': 2, 'item': 'Udang Goreng Tepung', 'description': 'Renyah', 'type': 'Snack'},
+      {'quantity': 2, 'item': 'Teh Melati', 'description': 'Dingin', 'type': 'Minuman'},
+      {'quantity': 1, 'item': 'Roti Canai', 'description': 'Dengan kari', 'type': 'Snack'},
+      {'quantity': 1, 'item': 'Dimsum', 'description': 'Beraneka rasa', 'type': 'Snack'},
+      {'quantity': 1, 'item': 'Jus Semangka', 'description': 'Segar', 'type': 'Minuman'},
+    ]
+  },
+  {
+    'id_orderan': 'ORD013',
+    'queue': 013,
     'time': '19:00',
     'status': 'Order',
     'table': 'Table 12',

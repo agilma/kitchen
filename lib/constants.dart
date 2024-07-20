@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-const HeaderColor = Color(0xFFD80032);
+const HeaderColor = Color(0xFFD71313);
 const OrderStatusColor = Color(0xFF607D8B );
 const DoneStatusColor = Color(0xFF388E3C);
 

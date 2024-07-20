@@ -29,13 +29,12 @@ class _DoneCardState extends State<DoneCard> {
             var done = doneData[index];
             bool shouldDisplay = widget.selectedCategory == 'Semua' ||
                 orderContainsType(done, widget.selectedCategory);
-
             return shouldDisplay
                 ? Container(
                     width: MediaQuery.of(context).size.width / 3 -
                         16, // Mengatur lebar card
                     child: Card(
-                      elevation: 4,
+                      elevation: 8,
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -55,7 +54,7 @@ class _DoneCardState extends State<DoneCard> {
                                       style: const TextStyle(
                                         color: Colors.white,
                                         fontWeight: FontWeight.bold,
-                                        fontSize: 22.0,
+                                        fontSize: 28.0,
                                       ),
                                     ),
                                     Text(

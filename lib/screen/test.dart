@@ -2,45 +2,59 @@ import 'package:flutter/material.dart';
 
 void main() => runApp(MyApp());
 
+/// This Widget is the main application widget.
 class MyApp extends StatelessWidget {
+  static const String _title = 'Flutter Code Sample';
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: TestPage(),
+      debugShowCheckedModeBanner: false,
+      title: _title,
+      home: FadeTransitionExample(),
     );
   }
 }
 
-class TestPage extends StatefulWidget {
+class FadeTransitionExample extends StatefulWidget {
   @override
-  _TestPageState createState() => _TestPageState();
+  State<StatefulWidget> createState() => _Fade();
 }
 
-class _TestPageState extends State<TestPage> {
-  // Fungsi untuk merefresh halaman
-  void _refreshPage() {
-    setState(() {
-      // Aksi untuk merefresh halaman bisa dilakukan di sini
-      // Misalnya mengambil data ulang dari API atau mengupdate state lain
+class _Fade extends State<FadeTransitionExample> with TickerProviderStateMixin {
+  AnimationController? animationController;
+  Animation<double>? _animationValue;
+
+  @override
+  void initState() {
+    super.initState();
+    animationController = AnimationController(vsync: this, duration: const Duration(seconds: 2),);
+    _animationValue = Tween<double>(begin: 0.0, end: 0.5).animate(animationController!);
+
+    animationController!.addStatusListener((status){
+      if(status == AnimationStatus.completed){
+        animationController!.reverse();
+      }
+      else if(status == AnimationStatus.dismissed){
+        animationController!.forward();
+      }
     });
+    animationController!.forward();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Refresh Page Example'),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.refresh),
-            onPressed: _refreshPage,
+      body: Container(
+        child: Center(
+          child: FadeTransition(
+            opacity: _animationValue!,
+            child: Container(
+              color: Colors.blue,
+              width: 150,
+              height: 150,
+            ),
           ),
-        ],
-      ),
-      body: Center(
-        child: Text(
-          'Content of the page',
-          style: TextStyle(fontSize: 24),
         ),
       ),
     );
