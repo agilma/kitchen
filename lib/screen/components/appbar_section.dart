@@ -8,6 +8,7 @@ class BuildAppbar extends StatefulWidget implements PreferredSizeWidget {
   final Function(int) onItemTapped;
   final String selectedCategory;
   final Function(String) onCategoryChanged;
+  final Function(List<Map<String, dynamic>>) onDataOrderChanged; // Tambahkan parameter ini
 
   const BuildAppbar({
     Key? key,
@@ -15,6 +16,7 @@ class BuildAppbar extends StatefulWidget implements PreferredSizeWidget {
     required this.onItemTapped,
     required this.selectedCategory,
     required this.onCategoryChanged,
+    required this.onDataOrderChanged, // Tambahkan parameter ini
   }) : super(key: key);
 
   @override
@@ -37,18 +39,21 @@ class _BuildAppbarState extends State<BuildAppbar> {
     setState(() {
       dataOrder = List.from(orderData); // Memuat data dari file terpisah
     });
+    widget.onDataOrderChanged(dataOrder); // Memanggil fungsi callback saat inisialisasi
   }
 
-   List<Map<String, dynamic>> _fetchOrderData() {
+  List<Map<String, dynamic>> _fetchOrderData() {
     // Fungsi ini bisa disesuaikan jika Anda memiliki logika untuk memuat data baru.
-    return List.from(dataOrder);
+    return List.from(orderData); // Mengambil data baru dari orderData
   }
 
   void _refreshData() {
     setState(() {
       dataOrder = _fetchOrderData();
     });
+    widget.onDataOrderChanged(dataOrder); // Memanggil fungsi callback saat refresh data
   }
+
   @override
   Widget build(BuildContext context) {
     return AppBar(
@@ -74,12 +79,12 @@ class _BuildAppbarState extends State<BuildAppbar> {
           const Text(
             "Kitchen",
             style: TextStyle(
-              fontSize: 40, // Menurunkan ukuran font agar lebih responsif
+              fontSize: 40,
               fontWeight: FontWeight.w800,
               color: Color(0xFFFEFEFE),
             ),
           ),
-          const SizedBox(width: 20), // Memberikan sedikit jarak antara teks dan dropdown
+          const SizedBox(width: 20),
           Container(
             width: 200,
             height: 35,

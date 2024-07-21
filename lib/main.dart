@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:kitchen/screen/components/appbar_section.dart';
 import 'package:kitchen/screen/order/order_screen.dart';
 import 'package:kitchen/screen/done/done_screen.dart';
-import 'package:kitchen/screen/test.dart';
 
 void main() {
   runApp(const MyApp());
@@ -33,6 +32,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
   String _selectedCategory = 'Semua';
+  List<Map<String, dynamic>> _dataOrder = []; // Tambahkan variabel untuk menyimpan data order
 
   void _onItemTapped(int index) {
     setState(() {
@@ -46,6 +46,14 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
+  void _onDataOrderChanged(List<Map<String, dynamic>> newDataOrder) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      setState(() {
+        _dataOrder = newDataOrder;
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -54,12 +62,13 @@ class _HomeScreenState extends State<HomeScreen> {
         onItemTapped: _onItemTapped,
         selectedCategory: _selectedCategory,
         onCategoryChanged: _onCategoryChanged,
+        onDataOrderChanged: _onDataOrderChanged, // Tambahkan callback ini
       ),
       body: IndexedStack(
         index: _selectedIndex,
         children: <Widget>[
-          OrderScreen(selectedCategory: _selectedCategory),
-          DoneScreen(selectedCategory:_selectedCategory),
+          OrderScreen(selectedCategory: _selectedCategory, dataOrder: _dataOrder), // Tambahkan dataOrder sebagai parameter
+          DoneScreen(selectedCategory: _selectedCategory),
         ],
       ),
     );

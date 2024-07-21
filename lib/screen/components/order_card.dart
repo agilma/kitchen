@@ -7,10 +7,12 @@ import 'package:kitchen/screen/components/order_item.dart';
 
 class OrderCard extends StatefulWidget {
   final String selectedCategory;
+  final List<Map<String, dynamic>> dataOrder; // Tambahkan parameter ini
 
   const OrderCard({
     Key? key,
     required this.selectedCategory,
+    required this.dataOrder, // Tambahkan parameter ini
   }) : super(key: key);
 
   @override
@@ -29,8 +31,8 @@ class _OrderCardState extends State<OrderCard> {
           alignment: WrapAlignment.start,
           spacing: 4.0,
           runSpacing: 10.0,
-          children: List.generate(orderData.length, (index) {
-            var order = orderData[index];
+          children: List.generate(widget.dataOrder.length, (index) { // Menggunakan dataOrder dari widget
+            var order = widget.dataOrder[index]; // Mengambil data order dari widget
             bool shouldDisplay = widget.selectedCategory == 'Semua' ||
                 orderContainsType(order, widget.selectedCategory);
             return shouldDisplay
@@ -51,8 +53,7 @@ class _OrderCardState extends State<OrderCard> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text(
                                         'Order - 00${order['queue']}',
@@ -80,8 +81,7 @@ class _OrderCardState extends State<OrderCard> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text(
                                         '${order['table']}',
@@ -119,8 +119,8 @@ class _OrderCardState extends State<OrderCard> {
                                     order['status'] = 'Done';
                                     // Pindahkan order ke doneData
                                     doneData.add(order);
-                                    // Hapus order dari orderData
-                                    orderData.removeAt(index);
+                                    // Hapus order dari dataOrder widget
+                                    widget.dataOrder.removeAt(index);
                                   });
                                 },
                                 child: const Text(
