@@ -42,8 +42,8 @@ class _OrderCardState extends State<OrderCard> {
       child: Center(
         child: Wrap(
           alignment: WrapAlignment.start,
-          spacing: 4.0,
-          runSpacing: 10.0,
+          spacing: isLandscape ? 4.0 : 8.0, // Adjust spacing for landscape
+          runSpacing: isLandscape ? 8.0 : 10.0, // Adjust runSpacing for landscape
           children: List.generate(widget.dataOrder.length, (index) {
             var order = widget.dataOrder[index];
             bool shouldDisplay = widget.selectedCategory == 'Semua' ||
@@ -68,19 +68,23 @@ class _OrderCardState extends State<OrderCard> {
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Text(
-                                        'Order - 00${order['queue']}',
-                                        style: const TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 28.0,
+                                      Flexible(
+                                        child: Text(
+                                          'Order - 00${order['queue']}',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: isLandscape ? 22.0 : 28.0,
+                                          ),
                                         ),
                                       ),
-                                      Text(
-                                        '${order['time']}',
-                                        style: const TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 18.0,
+                                      Flexible(
+                                        child: Text(
+                                          '${order['time']}',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: isLandscape ? 14.0 : 18.0,
+                                          ),
                                         ),
                                       ),
                                     ],
@@ -96,17 +100,21 @@ class _OrderCardState extends State<OrderCard> {
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Text(
-                                        '${order['table']}',
-                                        style: const TextStyle(
-                                          fontSize: 16.0,
+                                      Flexible(
+                                        child: Text(
+                                          '${order['table']}',
+                                          style: TextStyle(
+                                            fontSize: isLandscape ? 14.0 : 16.0,
+                                          ),
                                         ),
                                       ),
-                                      Text(
-                                        '${order['name']}',
-                                        style: const TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 16.0,
+                                      Flexible(
+                                        child: Text(
+                                          '${order['name']}',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: isLandscape ? 14.0 : 16.0,
+                                          ),
                                         ),
                                       ),
                                     ],
