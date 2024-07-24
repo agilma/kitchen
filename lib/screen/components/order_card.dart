@@ -1,18 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:kitchen/constants.dart';
 import 'package:kitchen/data/done_data.dart';
-import 'package:kitchen/data/order_data.dart'; // Pastikan import data orderData Anda
-import 'package:kitchen/screen/components/category_filter.dart';
 import 'package:kitchen/screen/components/order_item.dart';
 
 class OrderCard extends StatefulWidget {
   final String selectedCategory;
-  final List<Map<String, dynamic>> dataOrder; // Tambahkan parameter ini
+  final List<Map<String, dynamic>> dataOrder;
 
   const OrderCard({
     Key? key,
     required this.selectedCategory,
-    required this.dataOrder, // Tambahkan parameter ini
+    required this.dataOrder,
   }) : super(key: key);
 
   @override
@@ -20,10 +18,25 @@ class OrderCard extends StatefulWidget {
 }
 
 class _OrderCardState extends State<OrderCard> {
-  // Tambahkan doneData untuk menyimpan order yang telah selesai
-
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isLandscape = MediaQuery.of(context).orientation == Orientation.landscape;
+    final isTablet = screenWidth >= 600;
+
+    int getColumnCount() {
+      if (isTablet) {
+        return 3;
+      } else {
+        return isLandscape ? 3 : 1;
+      }
+    }
+
+    double getCardWidth() {
+      int columnCount = getColumnCount();
+      return (screenWidth / columnCount) - (16 * (columnCount - 1) / columnCount);
+    }
+
     return SingleChildScrollView(
       scrollDirection: Axis.vertical,
       child: Center(
@@ -31,15 +44,15 @@ class _OrderCardState extends State<OrderCard> {
           alignment: WrapAlignment.start,
           spacing: 4.0,
           runSpacing: 10.0,
-          children: List.generate(widget.dataOrder.length, (index) { // Menggunakan dataOrder dari widget
-            var order = widget.dataOrder[index]; // Mengambil data order dari widget
+          children: List.generate(widget.dataOrder.length, (index) {
+            var order = widget.dataOrder[index];
             bool shouldDisplay = widget.selectedCategory == 'Semua' ||
                 orderContainsType(order, widget.selectedCategory);
             return shouldDisplay
                 ? Padding(
                     padding: const EdgeInsets.all(4.0),
                     child: Container(
-                      width: MediaQuery.of(context).size.width / 3 - 16, // Mengatur lebar card
+                      width: getCardWidth(),
                       child: Card(
                         elevation: 8,
                         child: Column(
@@ -142,7 +155,7 @@ class _OrderCardState extends State<OrderCard> {
                       ),
                     ),
                   )
-                : const SizedBox(); // Jangan tampilkan card jika tidak memenuhi kriteria
+                : const SizedBox();
           }),
         ),
       ),

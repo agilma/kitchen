@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:kitchen/constants.dart';
 import 'package:kitchen/data/order_data.dart';
-import 'package:kitchen/screen/components/category_filter.dart';
 
 class BuildAppbar extends StatefulWidget implements PreferredSizeWidget {
   final int selectedIndex;
   final Function(int) onItemTapped;
   final String selectedCategory;
   final Function(String) onCategoryChanged;
-  final Function(List<Map<String, dynamic>>) onDataOrderChanged; // Tambahkan parameter ini
+  final Function(List<Map<String, dynamic>>) onDataOrderChanged;
 
   const BuildAppbar({
     Key? key,
@@ -16,202 +15,395 @@ class BuildAppbar extends StatefulWidget implements PreferredSizeWidget {
     required this.onItemTapped,
     required this.selectedCategory,
     required this.onCategoryChanged,
-    required this.onDataOrderChanged, // Tambahkan parameter ini
+    required this.onDataOrderChanged,
   }) : super(key: key);
 
   @override
   State<BuildAppbar> createState() => _BuildAppbarState();
 
   @override
-  Size get preferredSize => const Size.fromHeight(60);
+  Size get preferredSize {
+    // Mendapatkan orientasi perangkat
+    final Orientation orientation = MediaQueryData.fromWindow(WidgetsBinding.instance.window).orientation;
+    // Mengatur tinggi AppBar berdasarkan orientasi
+    final double height = orientation == Orientation.landscape ? 60.0 : 120.0;
+    return Size.fromHeight(height);
+  }
 }
 
 class _BuildAppbarState extends State<BuildAppbar> {
-  List<Map<String, dynamic>> dataOrder = []; // Inisialisasi array kosong
+  List<Map<String, dynamic>> dataOrder = [];
 
   @override
   void initState() {
     super.initState();
-    _loadInitialData(); // Muat data saat inisialisasi
+    _loadInitialData();
   }
 
   void _loadInitialData() {
     setState(() {
-      dataOrder = List.from(orderData); // Memuat data dari file terpisah
+      dataOrder = List.from(orderData);
     });
-    widget.onDataOrderChanged(dataOrder); // Memanggil fungsi callback saat inisialisasi
+    widget.onDataOrderChanged(dataOrder);
   }
 
   List<Map<String, dynamic>> _fetchOrderData() {
-    // Fungsi ini bisa disesuaikan jika Anda memiliki logika untuk memuat data baru.
-    return List.from(orderData); // Mengambil data baru dari orderData
+    return List.from(orderData);
   }
 
   void _refreshData() {
     setState(() {
       dataOrder = _fetchOrderData();
     });
-    widget.onDataOrderChanged(dataOrder); // Memanggil fungsi callback saat refresh data
+    widget.onDataOrderChanged(dataOrder);
   }
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isLandscape = MediaQuery.of(context).orientation == Orientation.landscape;
+    final isTablet = screenWidth >= 600;
+    
     return AppBar(
       backgroundColor: HeaderColor,
-      toolbarHeight: 60,
-      title: Row(
-        children: [
-          const SizedBox(width: 10),
-          Padding(
-            padding: const EdgeInsets.all(10),
-            child: Container(
-              width: 40,
-              height: 50,
-              decoration: const BoxDecoration(
-                shape: BoxShape.circle,
-                image: DecorationImage(
-                  image: AssetImage("assets/images/kitchenlogo2.jpg"),
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
-          ),
-          const Text(
-            "Kitchen",
-            style: TextStyle(
-              fontSize: 40,
-              fontWeight: FontWeight.w800,
-              color: Color(0xFFFEFEFE),
-            ),
-          ),
-          const SizedBox(width: 20),
-          Container(
-            width: 200,
-            height: 35,
-            decoration: BoxDecoration(
-              color: Color(0xFFFEFEFE),
-              borderRadius: BorderRadius.circular(16),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.only(left: 8),
-              child: DropdownButton<String>(
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: Colors.black),
-                value: widget.selectedCategory,
-                onChanged: (String? newValue) {
-                  if (newValue != null) {
-                    widget.onCategoryChanged(newValue);
-                  }
-                },
-                underline: const SizedBox(),
-                borderRadius: BorderRadius.circular(10),
-                isExpanded: true,
-                items: ['Semua', 'Makanan', 'Minuman', 'Snack', 'Item']
-                    .map<DropdownMenuItem<String>>((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
-              ),
-            ),
-          ),
-          const Spacer(),
-          Container(
-            height: 40,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: Colors.transparent),
-            ),
-            child: ToggleButtons(
-              borderRadius: BorderRadius.circular(16),
-              fillColor: Colors.transparent,
-              selectedColor: Color(0xFFFEFEFE),
-              color: Color(0xFFFEFEFE),
-              borderWidth: 1,
-              isSelected: [widget.selectedIndex == 0, widget.selectedIndex == 1],
-              onPressed: (int index) {
-                widget.onItemTapped(index);
-              },
-              children: <Widget>[
-                Container(
-                  width: 100,
-                  height: 40,
-                  decoration: BoxDecoration(
-                    color: widget.selectedIndex == 0 ? OrderStatusColor : Color(0xFFFEFEFE),
-                    borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(16),
-                      bottomLeft: Radius.circular(16),
-                    ),
-                  ),
-                  child: Center(
-                    child: Text(
-                      'Order',
-                      style: TextStyle(
-                          color: widget.selectedIndex == 0 ? Color(0xFFFEFEFE) : Colors.black,
-                          fontSize: 18,
-                          fontWeight: FontWeight.w800),
+      toolbarHeight: widget.preferredSize.height, // Menggunakan tinggi dari preferredSize
+      title: isLandscape
+          ? Row(
+              children: [
+                Padding(
+                  padding: EdgeInsets.all(isTablet ? 8 : 5),
+                  child: Container(
+                    width: isTablet ? (isLandscape ? 40 : 35) : (isLandscape ? 30 : 25),
+                    height: isTablet ? (isLandscape ? 45 : 40) : (isLandscape ? 35 : 30),
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                      image: DecorationImage(
+                        image: AssetImage("assets/images/kitchenlogo2.jpg"),
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
                 ),
+                Text(
+                  "Kitchen",
+                  style: TextStyle(
+                    fontSize: isTablet ? (isLandscape ? 28 : 25) : (isLandscape ? 22 : 18),
+                    fontWeight: FontWeight.w800,
+                    color: const Color(0xFFFEFEFE),
+                  ),
+                ),
+                SizedBox(width: isTablet ? 15 : 10),
                 Container(
-                  width: 100,
-                  height: 40,
+                  width: isTablet ? (isLandscape ? 180 : 160) : (isLandscape ? 130 : 120),
+                  height: isTablet ? (isLandscape ? 30 : 25) : (isLandscape ? 25 : 20),
                   decoration: BoxDecoration(
-                    color: widget.selectedIndex == 1 ? DoneStatusColor : Color(0xFFFEFEFE),
-                    borderRadius: const BorderRadius.only(
-                      topRight: Radius.circular(16),
-                      bottomRight: Radius.circular(16),
+                    color: const Color(0xFFFEFEFE),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 8),
+                    child: DropdownButton<String>(
+                      style: TextStyle(
+                          fontSize: isTablet ? (isLandscape ? 14 : 12) : (isLandscape ? 12 : 10),
+                          fontWeight: FontWeight.w800,
+                          color: Colors.black),
+                      value: widget.selectedCategory,
+                      onChanged: (String? newValue) {
+                        if (newValue != null) {
+                          widget.onCategoryChanged(newValue);
+                        }
+                      },
+                      underline: const SizedBox(),
+                      borderRadius: BorderRadius.circular(8),
+                      isExpanded: true,
+                      items: ['Semua', 'Makanan', 'Minuman', 'Snack', 'Item']
+                          .map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
                     ),
                   ),
-                  child: Center(
-                    child: Text(
-                      'Selesai',
-                      style: TextStyle(
-                          color: widget.selectedIndex == 1 ? Color(0xFFFEFEFE) : Colors.black,
-                          fontSize: 18,
-                          fontWeight: FontWeight.w800),
+                ),
+                const Spacer(),
+                Container(
+                  height: isTablet ? (isLandscape ? 35 : 30) : (isLandscape ? 30 : 25),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: Colors.transparent),
+                  ),
+                  child: ToggleButtons(
+                    borderRadius: BorderRadius.circular(12),
+                    fillColor: Colors.transparent,
+                    selectedColor: const Color(0xFFFEFEFE),
+                    color: const Color(0xFFFEFEFE),
+                    borderWidth: 1,
+                    isSelected: [widget.selectedIndex == 0, widget.selectedIndex == 1],
+                    onPressed: (int index) {
+                      widget.onItemTapped(index);
+                    },
+                    children: <Widget>[
+                      Container(
+                        width: isTablet ? (isLandscape ? 80 : 70) : (isLandscape ? 70 : 60),
+                        height: isTablet ? (isLandscape ? 35 : 30) : (isLandscape ? 30 : 25),
+                        decoration: BoxDecoration(
+                          color: widget.selectedIndex == 0 ? OrderStatusColor : const Color(0xFFFEFEFE),
+                          borderRadius: const BorderRadius.only(
+                            topLeft: Radius.circular(12),
+                            bottomLeft: Radius.circular(12),
+                          ),
+                        ),
+                        child: Center(
+                          child: Text(
+                            'Order',
+                            style: TextStyle(
+                                color: widget.selectedIndex == 0 ? const Color(0xFFFEFEFE) : Colors.black,
+                                fontSize: isTablet ? (isLandscape ? 14 : 12) : (isLandscape ? 12 : 10),
+                                fontWeight: FontWeight.w800),
+                          ),
+                        ),
+                      ),
+                      Container(
+                        width: isTablet ? (isLandscape ? 80 : 70) : (isLandscape ? 70 : 60),
+                        height: isTablet ? (isLandscape ? 35 : 30) : (isLandscape ? 30 : 25),
+                        decoration: BoxDecoration(
+                          color: widget.selectedIndex == 1 ? DoneStatusColor : const Color(0xFFFEFEFE),
+                          borderRadius: const BorderRadius.only(
+                            topRight: Radius.circular(12),
+                            bottomRight: Radius.circular(12),
+                          ),
+                        ),
+                        child: Center(
+                          child: Text(
+                            'Selesai',
+                            style: TextStyle(
+                                color: widget.selectedIndex == 1 ? const Color(0xFFFEFEFE) : Colors.black,
+                                fontSize: isTablet ? (isLandscape ? 14 : 12) : (isLandscape ? 12 : 10),
+                                fontWeight: FontWeight.w800),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(width: isTablet ? 8 : 5),
+                ElevatedButton(
+                  onPressed: _refreshData,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFFFEFEFE),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
                     ),
+                    minimumSize: Size(
+                      isTablet ? (isLandscape ? 40 : 35) : (isLandscape ? 35 : 30),
+                      isTablet ? (isLandscape ? 35 : 30) : (isLandscape ? 30 : 25),
+                    ),
+                  ),
+                  child: Icon(
+                    Icons.refresh,
+                    color: Colors.black,
+                    size: isTablet ? (isLandscape ? 20 : 18) : (isLandscape ? 18 : 16),
+                  ),
+                ),
+                SizedBox(width: isTablet ? 8 : 5),
+                ElevatedButton(
+                  onPressed: () {
+                    // Add your settings functionality here
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFFFEFEFE),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    minimumSize: Size(
+                      isTablet ? (isLandscape ? 40 : 35) : (isLandscape ? 35 : 30),
+                      isTablet ? (isLandscape ? 35 : 30) : (isLandscape ? 30 : 25),
+                    ),
+                  ),
+                  child: Icon(
+                    Icons.settings,
+                    color: Colors.black,
+                    size: isTablet ? (isLandscape ? 20 : 18) : (isLandscape ? 18 : 16),
                   ),
                 ),
               ],
+            )
+          : Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(top: isTablet ? 20 : 10, bottom: 10),
+                  child: Row(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.all(isTablet ? 8 : 5),
+                        child: Container(
+                          width: isTablet ? 40 : 35,
+                          height: isTablet ? 45 : 40,
+                          decoration: const BoxDecoration(
+                            shape: BoxShape.circle,
+                            image: DecorationImage(
+                              image: AssetImage("assets/images/kitchenlogo2.jpg"),
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: 10),
+                      Expanded(
+                        child: Text(
+                          "Kitchen",
+                          style: TextStyle(
+                            fontSize: isTablet ? 25 : 20,
+                            fontWeight: FontWeight.w800,
+                            color: const Color(0xFFFEFEFE),
+                          ),
+                        ),
+                      ),
+                      Container(
+                        width: isTablet ? 160 : 120,
+                        height: isTablet ? 30 : 25,
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFFEFEFE),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 8),
+                          child: DropdownButton<String>(
+                            style: TextStyle(
+                                fontSize: isTablet ? 14 : 12,
+                                fontWeight: FontWeight.w800,
+                                color: Colors.black),
+                            value: widget.selectedCategory,
+                            onChanged: (String? newValue) {
+                              if (newValue != null) {
+                                widget.onCategoryChanged(newValue);
+                              }
+                            },
+                            underline: const SizedBox(),
+                            borderRadius: BorderRadius.circular(8),
+                            isExpanded: true,
+                            items: ['Semua', 'Makanan', 'Minuman', 'Snack', 'Item']
+                                .map<DropdownMenuItem<String>>((String value) {
+                              return DropdownMenuItem<String>(
+                                value: value,
+                                child: Text(value),
+                              );
+                            }).toList(),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      height: isTablet ? 35 : 30,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: Colors.transparent),
+                      ),
+                      child: ToggleButtons(
+                        borderRadius: BorderRadius.circular(12),
+                        fillColor: Colors.transparent,
+                        selectedColor: const Color(0xFFFEFEFE),
+                        color: const Color(0xFFFEFEFE),
+                        borderWidth: 1,
+                        isSelected: [widget.selectedIndex == 0, widget.selectedIndex == 1],
+                        onPressed: (int index) {
+                          widget.onItemTapped(index);
+                        },
+                        children: <Widget>[
+                          Container(
+                            width: isTablet ? 70 : 60,
+                            height: isTablet ? 30 : 25,
+                            decoration: BoxDecoration(
+                              color: widget.selectedIndex == 0 ? OrderStatusColor : const Color(0xFFFEFEFE),
+                              borderRadius: const BorderRadius.only(
+                                topLeft: Radius.circular(12),
+                                bottomLeft: Radius.circular(12),
+                              ),
+                            ),
+                            child: Center(
+                              child: Text(
+                                'Order',
+                                style: TextStyle(
+                                    color: widget.selectedIndex == 0 ? const Color(0xFFFEFEFE) : Colors.black,
+                                    fontSize: isTablet ? 14 : 12,
+                                    fontWeight: FontWeight.w800),
+                              ),
+                            ),
+                          ),
+                          Container(
+                            width: isTablet ? 70 : 60,
+                            height: isTablet ? 30 : 25,
+                            decoration: BoxDecoration(
+                              color: widget.selectedIndex == 1 ? DoneStatusColor : const Color(0xFFFEFEFE),
+                              borderRadius: const BorderRadius.only(
+                                topRight: Radius.circular(12),
+                                bottomRight: Radius.circular(12),
+                              ),
+                            ),
+                            child: Center(
+                              child: Text(
+                                'Selesai',
+                                style: TextStyle(
+                                    color: widget.selectedIndex == 1 ? const Color(0xFFFEFEFE) : Colors.black,
+                                    fontSize: isTablet ? 14 : 12,
+                                    fontWeight: FontWeight.w800),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(width: 10),
+                    ElevatedButton(
+                      onPressed: _refreshData,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFFFEFEFE),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        minimumSize: Size(
+                          isTablet ? 35 : 30,
+                          isTablet ? 35 : 30,
+                        ),
+                      ),
+                      child: Icon(
+                        Icons.refresh,
+                        color: Colors.black,
+                        size: isTablet ? 18 : 16,
+                      ),
+                    ),
+                    SizedBox(width: 10),
+                    ElevatedButton(
+                      onPressed: () {
+                        // Add your settings functionality here
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFFFEFEFE),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        minimumSize: Size(
+                          isTablet ? 35 : 30,
+                          isTablet ? 35 : 30,
+                        ),
+                      ),
+                      child: Icon(
+                        Icons.settings,
+                        color: Colors.black,
+                        size: isTablet ? 18 : 16,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
             ),
-          ),
-          const SizedBox(width: 20),
-          ElevatedButton(
-            onPressed: _refreshData,
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Color(0xFFFEFEFE),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16),
-              ),
-              minimumSize: Size(50, 40),
-            ),
-            child: const Icon(
-              Icons.refresh,
-              color: Colors.black,
-              size: 30,
-            ),
-          ),
-          const SizedBox(width: 10),
-          ElevatedButton(
-            onPressed: () {
-              // Add your settings functionality here
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Color(0xFFFEFEFE),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16),
-              ),
-              minimumSize: Size(50, 40),
-            ),
-            child: const Icon(
-              Icons.settings,
-              color: Colors.black,
-              size: 30,
-            ),
-          ),
-        ],
-      ),
     );
   }
 }
