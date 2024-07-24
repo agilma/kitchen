@@ -1,61 +1,83 @@
 import 'package:flutter/material.dart';
+import 'package:kitchen/API/models.dart'; // Ganti dengan nama file model Anda
+import 'package:kitchen/API/api_service.dart';
 
-void main() => runApp(MyApp());
-
-/// This Widget is the main application widget.
-class MyApp extends StatelessWidget {
-  static const String _title = 'Flutter Code Sample';
-
+class OrderListPage extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: _title,
-      home: FadeTransitionExample(),
-    );
-  }
+  _OrderListPageState createState() => _OrderListPageState();
 }
 
-class FadeTransitionExample extends StatefulWidget {
-  @override
-  State<StatefulWidget> createState() => _Fade();
-}
-
-class _Fade extends State<FadeTransitionExample> with TickerProviderStateMixin {
-  AnimationController? animationController;
-  Animation<double>? _animationValue;
+class _OrderListPageState extends State<OrderListPage> {
+  late Future<List<Order>> futureOrders;
 
   @override
   void initState() {
     super.initState();
-    animationController = AnimationController(vsync: this, duration: const Duration(seconds: 2),);
-    _animationValue = Tween<double>(begin: 0.0, end: 0.5).animate(animationController!);
-
-    animationController!.addStatusListener((status){
-      if(status == AnimationStatus.completed){
-        animationController!.reverse();
-      }
-      else if(status == AnimationStatus.dismissed){
-        animationController!.forward();
-      }
-    });
-    animationController!.forward();
+    futureOrders = fetchOrders();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        child: Center(
-          child: FadeTransition(
-            opacity: _animationValue!,
-            child: Container(
-              color: Colors.blue,
-              width: 150,
-              height: 150,
-            ),
-          ),
-        ),
+      appBar: AppBar(
+        title: Text('Orders List'),
+      ),
+      body: FutureBuilder<List<Order>>(
+        future: futureOrders,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            print('Error: ${snapshot.error}');
+            return Center(child: Text('An error occurred: ${snapshot.error}'));
+          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return Center(child: Text('No data found'));
+          } else {
+            return ListView.builder(
+              itemCount: snapshot.data!.length,
+              itemBuilder: (context, index) {
+                final order = snapshot.data![index];
+                print('Order items: ${order.items}'); // Logging data items sebelum pengecekan
+                return Card(
+                  margin: EdgeInsets.all(10),
+                  child: ExpansionTile(
+                    title: Text(order.name),
+                    subtitle: Text(order.status),
+                    trailing: Text(order.table),
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('Queue: ${order.queue}'),
+                            Text('Time: ${order.time}'),
+                            SizedBox(height: 10),
+                            if (order.items.isNotEmpty) ...[
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: order.items.map((item) {
+                                  print('Rendering item: ${item.item}');
+                                  return ListTile(
+                                    title: Text(item.item),
+                                    subtitle: Text(item.description),
+                                    trailing: Text('${item.quantity} x ${item.type}'),
+                                  );
+                                }).toList(),
+                              )
+                            ] else ...[
+                              Text('No items found for this order')
+                            ]
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            );
+          }
+        },
       ),
     );
   }
