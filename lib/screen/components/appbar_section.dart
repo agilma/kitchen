@@ -23,9 +23,7 @@ class BuildAppbar extends StatefulWidget implements PreferredSizeWidget {
 
   @override
   Size get preferredSize {
-    // Mendapatkan orientasi perangkat
     final Orientation orientation = MediaQueryData.fromWindow(WidgetsBinding.instance.window).orientation;
-    // Mengatur tinggi AppBar berdasarkan orientasi
     final double height = orientation == Orientation.landscape ? 60.0 : 120.0;
     return Size.fromHeight(height);
   }
@@ -63,10 +61,10 @@ class _BuildAppbarState extends State<BuildAppbar> {
     final screenWidth = MediaQuery.of(context).size.width;
     final isLandscape = MediaQuery.of(context).orientation == Orientation.landscape;
     final isTablet = screenWidth >= 600;
-    
+
     return AppBar(
       backgroundColor: HeaderColor,
-      toolbarHeight: widget.preferredSize.height, // Menggunakan tinggi dari preferredSize
+      toolbarHeight: widget.preferredSize.height,
       title: isLandscape
           ? Row(
               children: [
@@ -92,41 +90,43 @@ class _BuildAppbarState extends State<BuildAppbar> {
                     color: const Color(0xFFFEFEFE),
                   ),
                 ),
-                SizedBox(width: isTablet ? 15 : 10),
-                Container(
-                  width: isTablet ? (isLandscape ? 180 : 160) : (isLandscape ? 130 : 120),
-                  height: isTablet ? (isLandscape ? 30 : 25) : (isLandscape ? 25 : 20),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFFEFEFE),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 8),
-                    child: DropdownButton<String>(
-                      style: TextStyle(
-                          fontSize: isTablet ? (isLandscape ? 14 : 12) : (isLandscape ? 12 : 10),
-                          fontWeight: FontWeight.w800,
-                          color: Colors.black),
-                      value: widget.selectedCategory,
-                      onChanged: (String? newValue) {
-                        if (newValue != null) {
-                          widget.onCategoryChanged(newValue);
-                        }
-                      },
-                      underline: const SizedBox(),
-                      borderRadius: BorderRadius.circular(8),
-                      isExpanded: true,
-                      items: ['Semua', 'Makanan', 'Minuman', 'Snack', 'Item']
-                          .map<DropdownMenuItem<String>>((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value),
-                        );
-                      }).toList(),
+                SizedBox(width: isTablet ? 10 : 5),
+                Flexible(
+                  child: Container(
+                    width: isTablet ? (isLandscape ? 150 : 140) : (isLandscape ? 100 : 90),
+                    height: isTablet ? (isLandscape ? 25 : 20) : (isLandscape ? 20 : 15),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFFEFEFE),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 8),
+                      child: DropdownButton<String>(
+                        style: TextStyle(
+                            fontSize: isTablet ? (isLandscape ? 14 : 12) : (isLandscape ? 12 : 10),
+                            fontWeight: FontWeight.w800,
+                            color: Colors.black),
+                        value: widget.selectedCategory,
+                        onChanged: (String? newValue) {
+                          if (newValue != null) {
+                            widget.onCategoryChanged(newValue);
+                          }
+                        },
+                        underline: const SizedBox(),
+                        borderRadius: BorderRadius.circular(8),
+                        isExpanded: true,
+                        items: ['Semua', 'Makanan', 'Minuman', 'Snack', 'Item']
+                            .map<DropdownMenuItem<String>>((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(value),
+                          );
+                        }).toList(),
+                      ),
                     ),
                   ),
                 ),
-                const Spacer(),
+                Spacer(),
                 Container(
                   height: isTablet ? (isLandscape ? 35 : 30) : (isLandscape ? 30 : 25),
                   decoration: BoxDecoration(
@@ -145,7 +145,7 @@ class _BuildAppbarState extends State<BuildAppbar> {
                     },
                     children: <Widget>[
                       Container(
-                        width: isTablet ? (isLandscape ? 80 : 70) : (isLandscape ? 70 : 60),
+                        width: isTablet ? (isLandscape ? 70 : 60) : (isLandscape ? 60 : 50),
                         height: isTablet ? (isLandscape ? 35 : 30) : (isLandscape ? 30 : 25),
                         decoration: BoxDecoration(
                           color: widget.selectedIndex == 0 ? OrderStatusColor : const Color(0xFFFEFEFE),
@@ -165,7 +165,7 @@ class _BuildAppbarState extends State<BuildAppbar> {
                         ),
                       ),
                       Container(
-                        width: isTablet ? (isLandscape ? 80 : 70) : (isLandscape ? 70 : 60),
+                        width: isTablet ? (isLandscape ? 70 : 60) : (isLandscape ? 60 : 50),
                         height: isTablet ? (isLandscape ? 35 : 30) : (isLandscape ? 30 : 25),
                         decoration: BoxDecoration(
                           color: widget.selectedIndex == 1 ? DoneStatusColor : const Color(0xFFFEFEFE),
@@ -187,7 +187,7 @@ class _BuildAppbarState extends State<BuildAppbar> {
                     ],
                   ),
                 ),
-                SizedBox(width: isTablet ? 8 : 5),
+                SizedBox(width: isTablet ? 5 : 3),
                 ElevatedButton(
                   onPressed: _refreshData,
                   style: ElevatedButton.styleFrom(
@@ -196,35 +196,38 @@ class _BuildAppbarState extends State<BuildAppbar> {
                       borderRadius: BorderRadius.circular(12),
                     ),
                     minimumSize: Size(
-                      isTablet ? (isLandscape ? 40 : 35) : (isLandscape ? 35 : 30),
+                      isTablet ? (isLandscape ? 35 : 30) : (isLandscape ? 30 : 25),
                       isTablet ? (isLandscape ? 35 : 30) : (isLandscape ? 30 : 25),
                     ),
                   ),
                   child: Icon(
                     Icons.refresh,
                     color: Colors.black,
-                    size: isTablet ? (isLandscape ? 20 : 18) : (isLandscape ? 18 : 16),
+                    size: isTablet ? (isLandscape ? 18 : 16) : (isLandscape ? 16 : 14),
                   ),
                 ),
-                SizedBox(width: isTablet ? 8 : 5),
-                ElevatedButton(
-                  onPressed: () {
-                    // Add your settings functionality here
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFFFEFEFE),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
+                SizedBox(width: isTablet ? 5 : 3),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      // Add your settings functionality here
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFFFEFEFE),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      minimumSize: Size(
+                        isTablet ? (isLandscape ? 35 : 30) : (isLandscape ? 30 : 25),
+                        isTablet ? (isLandscape ? 35 : 30) : (isLandscape ? 30 : 25),
+                      ),
                     ),
-                    minimumSize: Size(
-                      isTablet ? (isLandscape ? 40 : 35) : (isLandscape ? 35 : 30),
-                      isTablet ? (isLandscape ? 35 : 30) : (isLandscape ? 30 : 25),
+                    child: Icon(
+                      Icons.settings,
+                      color: Colors.black,
+                      size: isTablet ? (isLandscape ? 18 : 16) : (isLandscape ? 16 : 14),
                     ),
-                  ),
-                  child: Icon(
-                    Icons.settings,
-                    color: Colors.black,
-                    size: isTablet ? (isLandscape ? 20 : 18) : (isLandscape ? 18 : 16),
                   ),
                 ),
               ],
@@ -300,67 +303,69 @@ class _BuildAppbarState extends State<BuildAppbar> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Container(
-                      height: isTablet ? 35 : 30,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: Colors.transparent),
-                      ),
-                      child: ToggleButtons(
-                        borderRadius: BorderRadius.circular(12),
-                        fillColor: Colors.transparent,
-                        selectedColor: const Color(0xFFFEFEFE),
-                        color: const Color(0xFFFEFEFE),
-                        borderWidth: 1,
-                        isSelected: [widget.selectedIndex == 0, widget.selectedIndex == 1],
-                        onPressed: (int index) {
-                          widget.onItemTapped(index);
-                        },
-                        children: <Widget>[
-                          Container(
-                            width: isTablet ? 70 : 60,
-                            height: isTablet ? 30 : 25,
-                            decoration: BoxDecoration(
-                              color: widget.selectedIndex == 0 ? OrderStatusColor : const Color(0xFFFEFEFE),
-                              borderRadius: const BorderRadius.only(
-                                topLeft: Radius.circular(12),
-                                bottomLeft: Radius.circular(12),
+                    Flexible(
+                      child: Container(
+                        height: isTablet ? 35 : 30,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(color: Colors.transparent),
+                        ),
+                        child: ToggleButtons(
+                          borderRadius: BorderRadius.circular(12),
+                          fillColor: Colors.transparent,
+                          selectedColor: const Color(0xFFFEFEFE),
+                          color: const Color(0xFFFEFEFE),
+                          borderWidth: 1,
+                          isSelected: [widget.selectedIndex == 0, widget.selectedIndex == 1],
+                          onPressed: (int index) {
+                            widget.onItemTapped(index);
+                          },
+                          children: <Widget>[
+                            Container(
+                              width: isTablet ? 70 : 60,
+                              height: isTablet ? 30 : 25,
+                              decoration: BoxDecoration(
+                                color: widget.selectedIndex == 0 ? OrderStatusColor : const Color(0xFFFEFEFE),
+                                borderRadius: const BorderRadius.only(
+                                  topLeft: Radius.circular(12),
+                                  bottomLeft: Radius.circular(12),
+                                ),
+                              ),
+                              child: Center(
+                                child: Text(
+                                  'Order',
+                                  style: TextStyle(
+                                      color: widget.selectedIndex == 0 ? const Color(0xFFFEFEFE) : Colors.black,
+                                      fontSize: isTablet ? 14 : 12,
+                                      fontWeight: FontWeight.w800),
+                                ),
                               ),
                             ),
-                            child: Center(
-                              child: Text(
-                                'Order',
-                                style: TextStyle(
-                                    color: widget.selectedIndex == 0 ? const Color(0xFFFEFEFE) : Colors.black,
-                                    fontSize: isTablet ? 14 : 12,
-                                    fontWeight: FontWeight.w800),
+                            Container(
+                              width: isTablet ? 70 : 60,
+                              height: isTablet ? 30 : 25,
+                              decoration: BoxDecoration(
+                                color: widget.selectedIndex == 1 ? DoneStatusColor : const Color(0xFFFEFEFE),
+                                borderRadius: const BorderRadius.only(
+                                  topRight: Radius.circular(12),
+                                  bottomRight: Radius.circular(12),
+                                ),
+                              ),
+                              child: Center(
+                                child: Text(
+                                  'Selesai',
+                                  style: TextStyle(
+                                      color: widget.selectedIndex == 1 ? const Color(0xFFFEFEFE) : Colors.black,
+                                      fontSize: isTablet ? 14 : 12,
+                                      fontWeight: FontWeight.w800),
+                                ),
                               ),
                             ),
-                          ),
-                          Container(
-                            width: isTablet ? 70 : 60,
-                            height: isTablet ? 30 : 25,
-                            decoration: BoxDecoration(
-                              color: widget.selectedIndex == 1 ? DoneStatusColor : const Color(0xFFFEFEFE),
-                              borderRadius: const BorderRadius.only(
-                                topRight: Radius.circular(12),
-                                bottomRight: Radius.circular(12),
-                              ),
-                            ),
-                            child: Center(
-                              child: Text(
-                                'Selesai',
-                                style: TextStyle(
-                                    color: widget.selectedIndex == 1 ? const Color(0xFFFEFEFE) : Colors.black,
-                                    fontSize: isTablet ? 14 : 12,
-                                    fontWeight: FontWeight.w800),
-                              ),
-                            ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
-                    SizedBox(width: 10),
+                    SizedBox(width: isTablet ? 5 : 3),
                     ElevatedButton(
                       onPressed: _refreshData,
                       style: ElevatedButton.styleFrom(
@@ -379,7 +384,7 @@ class _BuildAppbarState extends State<BuildAppbar> {
                         size: isTablet ? 18 : 16,
                       ),
                     ),
-                    SizedBox(width: 10),
+                    SizedBox(width: isTablet ? 5 : 3),
                     ElevatedButton(
                       onPressed: () {
                         // Add your settings functionality here
