@@ -1,6 +1,6 @@
 class Item {
   final String id;
-  final String idOrderan;  // This should match the JSON key, even if the property name is different
+  final String idOrderan; 
   final int quantity;
   final String item;
   final String description;
@@ -19,7 +19,7 @@ class Item {
     print('Parsing Item JSON: $json');
     return Item(
       id: json['id'] ?? '',
-      idOrderan: json['orderDataId'] ?? '',  // Map to the correct JSON key
+      idOrderan: json['orderDataId'] ?? '',  
       quantity: json['quantity'] ?? 0,
       item: json['item'] ?? '',
       description: json['description'] ?? '',
@@ -49,7 +49,7 @@ class Order {
 
   factory Order.fromJson(Map<String, dynamic> json) {
     print('Parsing Order JSON: $json');
-    var list = json['Items'] as List? ?? []; // Ensure the key matches the JSON response
+    var list = json['Items'] as List? ?? [];
     List<Item> itemsList = list.map((i) => Item.fromJson(i)).toList();
     print('Parsed Items: $itemsList');
 

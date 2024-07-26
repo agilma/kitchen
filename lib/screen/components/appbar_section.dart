@@ -23,7 +23,8 @@ class BuildAppbar extends StatefulWidget implements PreferredSizeWidget {
 
   @override
   Size get preferredSize {
-    final Orientation orientation = MediaQueryData.fromWindow(WidgetsBinding.instance.window).orientation;
+    final Orientation orientation =
+        MediaQueryData.fromWindow(WidgetsBinding.instance.window).orientation;
     final double height = orientation == Orientation.landscape ? 60.0 : 120.0;
     return Size.fromHeight(height);
   }
@@ -59,7 +60,8 @@ class _BuildAppbarState extends State<BuildAppbar> {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-    final isLandscape = MediaQuery.of(context).orientation == Orientation.landscape;
+    final isLandscape =
+        MediaQuery.of(context).orientation == Orientation.landscape;
     final isTablet = screenWidth >= 600;
 
     return AppBar(
@@ -71,30 +73,28 @@ class _BuildAppbarState extends State<BuildAppbar> {
                 Padding(
                   padding: EdgeInsets.all(isTablet ? 8 : 5),
                   child: Container(
-                    width: isTablet ? (isLandscape ? 40 : 35) : (isLandscape ? 30 : 25),
-                    height: isTablet ? (isLandscape ? 45 : 40) : (isLandscape ? 35 : 30),
+                    width: isTablet
+                        ? (isLandscape ? 100 : 35)
+                        : (isLandscape ? 30 : 25),
+                    height: isTablet
+                        ? (isLandscape ? 70 : 40)
+                        : (isLandscape ? 35 : 30),
                     decoration: const BoxDecoration(
-                      shape: BoxShape.circle,
                       image: DecorationImage(
-                        image: AssetImage("assets/images/kitchenlogo2.jpg"),
-                        fit: BoxFit.cover,
+                        image: AssetImage("assets/images/logo-kontena.png"),
                       ),
                     ),
-                  ),
-                ),
-                Text(
-                  "Kitchen",
-                  style: TextStyle(
-                    fontSize: isTablet ? (isLandscape ? 28 : 25) : (isLandscape ? 22 : 18),
-                    fontWeight: FontWeight.w800,
-                    color: const Color(0xFFFEFEFE),
                   ),
                 ),
                 SizedBox(width: isTablet ? 10 : 5),
                 Flexible(
                   child: Container(
-                    width: isTablet ? (isLandscape ? 150 : 140) : (isLandscape ? 100 : 90),
-                    height: isTablet ? (isLandscape ? 25 : 20) : (isLandscape ? 20 : 15),
+                    width: isTablet
+                        ? (isLandscape ? 150 : 140)
+                        : (isLandscape ? 100 : 90),
+                    height: isTablet
+                        ? (isLandscape ? 25 : 20)
+                        : (isLandscape ? 20 : 15),
                     decoration: BoxDecoration(
                       color: const Color(0xFFFEFEFE),
                       borderRadius: BorderRadius.circular(12),
@@ -103,7 +103,9 @@ class _BuildAppbarState extends State<BuildAppbar> {
                       padding: const EdgeInsets.only(left: 8),
                       child: DropdownButton<String>(
                         style: TextStyle(
-                            fontSize: isTablet ? (isLandscape ? 14 : 12) : (isLandscape ? 12 : 10),
+                            fontSize: isTablet
+                                ? (isLandscape ? 14 : 12)
+                                : (isLandscape ? 12 : 10),
                             fontWeight: FontWeight.w800,
                             color: Colors.black),
                         value: widget.selectedCategory,
@@ -115,8 +117,12 @@ class _BuildAppbarState extends State<BuildAppbar> {
                         underline: const SizedBox(),
                         borderRadius: BorderRadius.circular(8),
                         isExpanded: true,
-                        items: ['Semua', 'Makanan', 'Minuman', 'Snack', 'Item']
-                            .map<DropdownMenuItem<String>>((String value) {
+                        items: [
+                          'All Station',
+                          'Food Station',
+                          'Beverage Station',
+                          'Snack Station'
+                        ].map<DropdownMenuItem<String>>((String value) {
                           return DropdownMenuItem<String>(
                             value: value,
                             child: Text(value),
@@ -128,7 +134,9 @@ class _BuildAppbarState extends State<BuildAppbar> {
                 ),
                 Spacer(),
                 Container(
-                  height: isTablet ? (isLandscape ? 35 : 30) : (isLandscape ? 30 : 25),
+                  height: isTablet
+                      ? (isLandscape ? 35 : 30)
+                      : (isLandscape ? 30 : 25),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(12),
                     border: Border.all(color: Colors.transparent),
@@ -139,16 +147,25 @@ class _BuildAppbarState extends State<BuildAppbar> {
                     selectedColor: const Color(0xFFFEFEFE),
                     color: const Color(0xFFFEFEFE),
                     borderWidth: 1,
-                    isSelected: [widget.selectedIndex == 0, widget.selectedIndex == 1],
+                    isSelected: [
+                      widget.selectedIndex == 0,
+                      widget.selectedIndex == 1
+                    ],
                     onPressed: (int index) {
                       widget.onItemTapped(index);
                     },
                     children: <Widget>[
                       Container(
-                        width: isTablet ? (isLandscape ? 70 : 60) : (isLandscape ? 60 : 50),
-                        height: isTablet ? (isLandscape ? 35 : 30) : (isLandscape ? 30 : 25),
+                        width: isTablet
+                            ? (isLandscape ? 70 : 60)
+                            : (isLandscape ? 60 : 50),
+                        height: isTablet
+                            ? (isLandscape ? 35 : 30)
+                            : (isLandscape ? 30 : 25),
                         decoration: BoxDecoration(
-                          color: widget.selectedIndex == 0 ? OrderStatusColor : const Color(0xFFFEFEFE),
+                          color: widget.selectedIndex == 0
+                              ? OrderStatusColor
+                              : const Color(0xFFFEFEFE),
                           borderRadius: const BorderRadius.only(
                             topLeft: Radius.circular(12),
                             bottomLeft: Radius.circular(12),
@@ -158,17 +175,27 @@ class _BuildAppbarState extends State<BuildAppbar> {
                           child: Text(
                             'Order',
                             style: TextStyle(
-                                color: widget.selectedIndex == 0 ? const Color(0xFFFEFEFE) : Colors.black,
-                                fontSize: isTablet ? (isLandscape ? 14 : 12) : (isLandscape ? 12 : 10),
+                                color: widget.selectedIndex == 0
+                                    ? const Color(0xFFFEFEFE)
+                                    : Colors.black,
+                                fontSize: isTablet
+                                    ? (isLandscape ? 14 : 12)
+                                    : (isLandscape ? 12 : 10),
                                 fontWeight: FontWeight.w800),
                           ),
                         ),
                       ),
                       Container(
-                        width: isTablet ? (isLandscape ? 70 : 60) : (isLandscape ? 60 : 50),
-                        height: isTablet ? (isLandscape ? 35 : 30) : (isLandscape ? 30 : 25),
+                        width: isTablet
+                            ? (isLandscape ? 70 : 60)
+                            : (isLandscape ? 60 : 50),
+                        height: isTablet
+                            ? (isLandscape ? 35 : 30)
+                            : (isLandscape ? 30 : 25),
                         decoration: BoxDecoration(
-                          color: widget.selectedIndex == 1 ? DoneStatusColor : const Color(0xFFFEFEFE),
+                          color: widget.selectedIndex == 1
+                              ? DoneStatusColor
+                              : const Color(0xFFFEFEFE),
                           borderRadius: const BorderRadius.only(
                             topRight: Radius.circular(12),
                             bottomRight: Radius.circular(12),
@@ -178,8 +205,12 @@ class _BuildAppbarState extends State<BuildAppbar> {
                           child: Text(
                             'Selesai',
                             style: TextStyle(
-                                color: widget.selectedIndex == 1 ? const Color(0xFFFEFEFE) : Colors.black,
-                                fontSize: isTablet ? (isLandscape ? 14 : 12) : (isLandscape ? 12 : 10),
+                                color: widget.selectedIndex == 1
+                                    ? const Color(0xFFFEFEFE)
+                                    : Colors.black,
+                                fontSize: isTablet
+                                    ? (isLandscape ? 14 : 12)
+                                    : (isLandscape ? 12 : 10),
                                 fontWeight: FontWeight.w800),
                           ),
                         ),
@@ -196,14 +227,20 @@ class _BuildAppbarState extends State<BuildAppbar> {
                       borderRadius: BorderRadius.circular(12),
                     ),
                     minimumSize: Size(
-                      isTablet ? (isLandscape ? 35 : 30) : (isLandscape ? 30 : 25),
-                      isTablet ? (isLandscape ? 35 : 30) : (isLandscape ? 30 : 25),
+                      isTablet
+                          ? (isLandscape ? 35 : 30)
+                          : (isLandscape ? 30 : 25),
+                      isTablet
+                          ? (isLandscape ? 35 : 30)
+                          : (isLandscape ? 30 : 25),
                     ),
                   ),
                   child: Icon(
                     Icons.refresh,
                     color: Colors.black,
-                    size: isTablet ? (isLandscape ? 18 : 16) : (isLandscape ? 16 : 14),
+                    size: isTablet
+                        ? (isLandscape ? 18 : 16)
+                        : (isLandscape ? 16 : 14),
                   ),
                 ),
                 SizedBox(width: isTablet ? 5 : 3),
@@ -219,51 +256,48 @@ class _BuildAppbarState extends State<BuildAppbar> {
                         borderRadius: BorderRadius.circular(12),
                       ),
                       minimumSize: Size(
-                        isTablet ? (isLandscape ? 35 : 30) : (isLandscape ? 30 : 25),
-                        isTablet ? (isLandscape ? 35 : 30) : (isLandscape ? 30 : 25),
+                        isTablet
+                            ? (isLandscape ? 35 : 30)
+                            : (isLandscape ? 30 : 25),
+                        isTablet
+                            ? (isLandscape ? 35 : 30)
+                            : (isLandscape ? 30 : 25),
                       ),
                     ),
                     child: Icon(
                       Icons.settings,
                       color: Colors.black,
-                      size: isTablet ? (isLandscape ? 18 : 16) : (isLandscape ? 16 : 14),
+                      size: isTablet
+                          ? (isLandscape ? 18 : 16)
+                          : (isLandscape ? 16 : 14),
                     ),
                   ),
                 ),
               ],
             )
+
+          //portrait view
           : Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Padding(
-                  padding: EdgeInsets.only(top: isTablet ? 20 : 10, bottom: 10),
+                  padding: EdgeInsets.only(top: isTablet ? 10 : 5, bottom: 5),
                   child: Row(
                     children: [
                       Padding(
                         padding: EdgeInsets.all(isTablet ? 8 : 5),
                         child: Container(
-                          width: isTablet ? 40 : 35,
-                          height: isTablet ? 45 : 40,
+                          width: isTablet ? 40 : 70,
+                          height: isTablet ? 45 : 60,
                           decoration: const BoxDecoration(
-                            shape: BoxShape.circle,
                             image: DecorationImage(
-                              image: AssetImage("assets/images/kitchenlogo2.jpg"),
-                              fit: BoxFit.cover,
+                              image:
+                                  AssetImage("assets/images/logo-kontena.png"),
                             ),
                           ),
                         ),
                       ),
                       SizedBox(width: 10),
-                      Expanded(
-                        child: Text(
-                          "Kitchen",
-                          style: TextStyle(
-                            fontSize: isTablet ? 25 : 20,
-                            fontWeight: FontWeight.w800,
-                            color: const Color(0xFFFEFEFE),
-                          ),
-                        ),
-                      ),
                       Container(
                         width: isTablet ? 160 : 120,
                         height: isTablet ? 30 : 25,
@@ -287,8 +321,12 @@ class _BuildAppbarState extends State<BuildAppbar> {
                             underline: const SizedBox(),
                             borderRadius: BorderRadius.circular(8),
                             isExpanded: true,
-                            items: ['Semua', 'Makanan', 'Minuman', 'Snack', 'Item']
-                                .map<DropdownMenuItem<String>>((String value) {
+                            items: [
+                              'All Station',
+                              'Food Station',
+                              'Beverage Station',
+                              'Snack Station'
+                            ].map<DropdownMenuItem<String>>((String value) {
                               return DropdownMenuItem<String>(
                                 value: value,
                                 child: Text(value),
@@ -316,7 +354,10 @@ class _BuildAppbarState extends State<BuildAppbar> {
                           selectedColor: const Color(0xFFFEFEFE),
                           color: const Color(0xFFFEFEFE),
                           borderWidth: 1,
-                          isSelected: [widget.selectedIndex == 0, widget.selectedIndex == 1],
+                          isSelected: [
+                            widget.selectedIndex == 0,
+                            widget.selectedIndex == 1
+                          ],
                           onPressed: (int index) {
                             widget.onItemTapped(index);
                           },
@@ -325,7 +366,9 @@ class _BuildAppbarState extends State<BuildAppbar> {
                               width: isTablet ? 70 : 60,
                               height: isTablet ? 30 : 25,
                               decoration: BoxDecoration(
-                                color: widget.selectedIndex == 0 ? OrderStatusColor : const Color(0xFFFEFEFE),
+                                color: widget.selectedIndex == 0
+                                    ? OrderStatusColor
+                                    : const Color(0xFFFEFEFE),
                                 borderRadius: const BorderRadius.only(
                                   topLeft: Radius.circular(12),
                                   bottomLeft: Radius.circular(12),
@@ -335,7 +378,9 @@ class _BuildAppbarState extends State<BuildAppbar> {
                                 child: Text(
                                   'Order',
                                   style: TextStyle(
-                                      color: widget.selectedIndex == 0 ? const Color(0xFFFEFEFE) : Colors.black,
+                                      color: widget.selectedIndex == 0
+                                          ? const Color(0xFFFEFEFE)
+                                          : Colors.black,
                                       fontSize: isTablet ? 14 : 12,
                                       fontWeight: FontWeight.w800),
                                 ),
@@ -345,7 +390,9 @@ class _BuildAppbarState extends State<BuildAppbar> {
                               width: isTablet ? 70 : 60,
                               height: isTablet ? 30 : 25,
                               decoration: BoxDecoration(
-                                color: widget.selectedIndex == 1 ? DoneStatusColor : const Color(0xFFFEFEFE),
+                                color: widget.selectedIndex == 1
+                                    ? DoneStatusColor
+                                    : const Color(0xFFFEFEFE),
                                 borderRadius: const BorderRadius.only(
                                   topRight: Radius.circular(12),
                                   bottomRight: Radius.circular(12),
@@ -355,7 +402,9 @@ class _BuildAppbarState extends State<BuildAppbar> {
                                 child: Text(
                                   'Selesai',
                                   style: TextStyle(
-                                      color: widget.selectedIndex == 1 ? const Color(0xFFFEFEFE) : Colors.black,
+                                      color: widget.selectedIndex == 1
+                                          ? const Color(0xFFFEFEFE)
+                                          : Colors.black,
                                       fontSize: isTablet ? 14 : 12,
                                       fontWeight: FontWeight.w800),
                                 ),
@@ -387,7 +436,7 @@ class _BuildAppbarState extends State<BuildAppbar> {
                     SizedBox(width: isTablet ? 5 : 3),
                     ElevatedButton(
                       onPressed: () {
-                        // Add your settings functionality here
+                        _refreshData();
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFFFEFEFE),

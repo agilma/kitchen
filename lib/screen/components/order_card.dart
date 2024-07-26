@@ -18,6 +18,10 @@ class OrderCard extends StatefulWidget {
 }
 
 class _OrderCardState extends State<OrderCard> {
+  final List<GlobalKey> _cardKeys = [];
+  final List<double> _cardHeights = [];
+  final Map<int, double> _maxHeightPerRow = {}; // Variable to store max height per row
+
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
@@ -37,22 +41,64 @@ class _OrderCardState extends State<OrderCard> {
       return (screenWidth / columnCount) - (16 * (columnCount - 1) / columnCount);
     }
 
+    if (isLandscape || isTablet) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _maxHeightPerRow.clear(); // Clear previous row heights
+
+        // Calculate heights for each card
+        for (int i = 0; i < _cardKeys.length; i++) {
+          final key = _cardKeys[i];
+          final renderBox = key.currentContext?.findRenderObject() as RenderBox?;
+          if (renderBox != null) {
+            final size = renderBox.size;
+            _cardHeights[i] = size.height;
+          }
+        }
+
+        // Determine max height for each row
+        final int cardsPerRow = 3;
+        for (int i = 0; i < _cardHeights.length; i += cardsPerRow) {
+          final end = (i + cardsPerRow <= _cardHeights.length) ? i + cardsPerRow : _cardHeights.length;
+          final rowHeights = _cardHeights.sublist(i, end);
+          final maxRowHeight = rowHeights.reduce((a, b) => a > b ? a : b);
+          final rowIndex = i ~/ cardsPerRow;
+          _maxHeightPerRow[rowIndex] = maxRowHeight;
+        }
+
+        // Redraw the widget to apply the new heights
+        setState(() {});
+      });
+    }
+
     return SingleChildScrollView(
       scrollDirection: Axis.vertical,
       child: Center(
         child: Wrap(
           alignment: WrapAlignment.start,
-          spacing: isLandscape ? 4.0 : 8.0, // Adjust spacing for landscape
-          runSpacing: isLandscape ? 8.0 : 10.0, // Adjust runSpacing for landscape
+          spacing: isLandscape ? 4.0 : 8.0,
+          runSpacing: isLandscape ? 8.0 : 10.0,
           children: List.generate(widget.dataOrder.length, (index) {
             var order = widget.dataOrder[index];
-            bool shouldDisplay = widget.selectedCategory == 'Semua' ||
-                orderContainsType(order, widget.selectedCategory);
+            bool shouldDisplay = widget.selectedCategory == 'All Station' ||
+                orderContainsStation(order, widget.selectedCategory);
+
+            if (_cardKeys.length <= index) {
+              _cardKeys.add(GlobalKey());
+              _cardHeights.add(0.0); // Initialize heights list
+            }
+
+            // Calculate the row index for the current card
+            final int cardsPerRow = 3;
+            final int rowIndex = index ~/ cardsPerRow;
+            final double? rowHeight = _maxHeightPerRow[rowIndex];
+
             return shouldDisplay
                 ? Padding(
                     padding: const EdgeInsets.all(4.0),
                     child: Container(
+                      key: _cardKeys[index], // Assign key here
                       width: getCardWidth(),
+                      height: (isLandscape || isTablet) ? rowHeight : null, // Apply the height of the row if landscape or tablet
                       child: Card(
                         elevation: 8,
                         child: Column(
@@ -121,41 +167,14 @@ class _OrderCardState extends State<OrderCard> {
                                   ),
                                   const Divider(),
                                   for (var item in order['items'])
-                                    if (widget.selectedCategory == 'Semua' ||
-                                        item['type'] == widget.selectedCategory)
+                                    if (widget.selectedCategory == 'All Station' ||
+                                        item['station'] == widget.selectedCategory)
                                       OrderItem(
                                         quantity: item['quantity'],
                                         title: item['item'],
                                         subtitle: item['description'],
                                       ),
                                 ],
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: ElevatedButton(
-                                onPressed: () {
-                                  setState(() {
-                                    // Ubah status order menjadi "Done"
-                                    order['status'] = 'Done';
-                                    // Pindahkan order ke doneData
-                                    doneData.add(order);
-                                    // Hapus order dari dataOrder widget
-                                    widget.dataOrder.removeAt(index);
-                                  });
-                                },
-                                child: const Text(
-                                  'Mark Done',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 16,
-                                  ),
-                                ),
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: OrderStatusColor,
-                                  foregroundColor: Colors.white,
-                                  minimumSize: const Size(double.infinity, 50),
-                                ),
                               ),
                             ),
                           ],
@@ -170,9 +189,9 @@ class _OrderCardState extends State<OrderCard> {
     );
   }
 
-  bool orderContainsType(Map<String, dynamic> order, String type) {
+  bool orderContainsStation(Map<String, dynamic> order, String station) {
     for (var item in order['items']) {
-      if (item['type'] == type) {
+      if (item['station'] == station) {
         return true;
       }
     }

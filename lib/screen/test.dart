@@ -59,9 +59,9 @@ class _OrderListPageState extends State<OrderListPage> {
                                 children: order.items.map((item) {
                                   print('Rendering item: ${item.item}');
                                   return ListTile(
+                                    leading: Text('${item.quantity}'),
                                     title: Text(item.item),
                                     subtitle: Text(item.description),
-                                    trailing: Text('${item.quantity} x ${item.type}'),
                                   );
                                 }).toList(),
                               )
