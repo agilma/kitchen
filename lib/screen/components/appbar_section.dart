@@ -60,6 +60,7 @@ class _BuildAppbarState extends State<BuildAppbar> {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
+    print(screenWidth);
     final isLandscape =
         MediaQuery.of(context).orientation == Orientation.landscape;
     final isTablet = screenWidth >= 600;
@@ -218,7 +219,7 @@ class _BuildAppbarState extends State<BuildAppbar> {
                     ],
                   ),
                 ),
-                SizedBox(width: isTablet ? 5 : 3),
+                SizedBox(width: isTablet ? 30 :10),
                 ElevatedButton(
                   onPressed: _refreshData,
                   style: ElevatedButton.styleFrom(
@@ -275,9 +276,8 @@ class _BuildAppbarState extends State<BuildAppbar> {
                 ),
               ],
             )
-
           //portrait view
-          : Column(
+        : Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Padding(
@@ -414,7 +414,7 @@ class _BuildAppbarState extends State<BuildAppbar> {
                         ),
                       ),
                     ),
-                    SizedBox(width: isTablet ? 5 : 3),
+                    SizedBox(width: isTablet ? 100 : 10),
                     ElevatedButton(
                       onPressed: _refreshData,
                       style: ElevatedButton.styleFrom(
