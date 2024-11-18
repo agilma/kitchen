@@ -3,19 +3,19 @@ import 'package:kitchen/constants.dart';
 import 'package:kitchen/data/order_data.dart';
 
 class BuildAppbar extends StatefulWidget implements PreferredSizeWidget {
-  final int selectedIndex;
-  final Function(int) onItemTapped;
-  final String selectedCategory;
-  final Function(String) onCategoryChanged;
-  final Function(List<Map<String, dynamic>>) onDataOrderChanged;
+  // final int selectedIndex;
+  // final Function(int) onItemTapped;
+  // final String selectedCategory;
+  // final Function(String) onCategoryChanged;
+  // final Function(List<Map<String, dynamic>>) onDataOrderChanged;
 
   const BuildAppbar({
     Key? key,
-    required this.selectedIndex,
-    required this.onItemTapped,
-    required this.selectedCategory,
-    required this.onCategoryChanged,
-    required this.onDataOrderChanged,
+    // required this.selectedIndex,
+    // required this.onItemTapped,
+    // required this.selectedCategory,
+    // required this.onCategoryChanged,
+    // required this.onDataOrderChanged,
   }) : super(key: key);
 
   @override
@@ -24,7 +24,7 @@ class BuildAppbar extends StatefulWidget implements PreferredSizeWidget {
   @override
   Size get preferredSize {
     final Orientation orientation =
-        MediaQueryData.fromWindow(WidgetsBinding.instance.window).orientation;
+        MediaQueryData.fromView(WidgetsBinding.instance.window).orientation;
     final double height = orientation == Orientation.landscape ? 60.0 : 120.0;
     return Size.fromHeight(height);
   }
@@ -43,7 +43,7 @@ class _BuildAppbarState extends State<BuildAppbar> {
     setState(() {
       dataOrder = List.from(orderData);
     });
-    widget.onDataOrderChanged(dataOrder);
+    //widget.onDataOrderChanged(dataOrder);
   }
 
   List<Map<String, dynamic>> _fetchOrderData() {
@@ -54,7 +54,7 @@ class _BuildAppbarState extends State<BuildAppbar> {
     setState(() {
       dataOrder = _fetchOrderData();
     });
-    widget.onDataOrderChanged(dataOrder);
+    //widget.onDataOrderChanged(dataOrder);
   }
 
   @override
@@ -109,10 +109,10 @@ class _BuildAppbarState extends State<BuildAppbar> {
                                 : (isLandscape ? 12 : 10),
                             fontWeight: FontWeight.w800,
                             color: Colors.black),
-                        value: widget.selectedCategory,
+                        //value: widget.selectedCategory,
                         onChanged: (String? newValue) {
                           if (newValue != null) {
-                            widget.onCategoryChanged(newValue);
+                            //widget.onCategoryChanged(newValue);
                           }
                         },
                         underline: const SizedBox(),
@@ -142,18 +142,18 @@ class _BuildAppbarState extends State<BuildAppbar> {
                     borderRadius: BorderRadius.circular(12),
                     border: Border.all(color: Colors.transparent),
                   ),
-                  child: ToggleButtons(
+                  child:ToggleButtons(
                     borderRadius: BorderRadius.circular(12),
                     fillColor: Colors.transparent,
                     selectedColor: const Color(0xFFFEFEFE),
                     color: const Color(0xFFFEFEFE),
                     borderWidth: 1,
                     isSelected: [
-                      widget.selectedIndex == 0,
-                      widget.selectedIndex == 1
+                      // widget.selectedIndex == 0,
+                      // widget.selectedIndex == 1
                     ],
                     onPressed: (int index) {
-                      widget.onItemTapped(index);
+                      //widget.onItemTapped(index);
                     },
                     children: <Widget>[
                       Container(
@@ -164,9 +164,9 @@ class _BuildAppbarState extends State<BuildAppbar> {
                             ? (isLandscape ? 35 : 30)
                             : (isLandscape ? 30 : 25),
                         decoration: BoxDecoration(
-                          color: widget.selectedIndex == 0
-                              ? OrderStatusColor
-                              : const Color(0xFFFEFEFE),
+                          // color: widget.selectedIndex == 0
+                          //     ? OrderStatusColor
+                          //     : const Color(0xFFFEFEFE),
                           borderRadius: const BorderRadius.only(
                             topLeft: Radius.circular(12),
                             bottomLeft: Radius.circular(12),
@@ -176,9 +176,9 @@ class _BuildAppbarState extends State<BuildAppbar> {
                           child: Text(
                             'Order',
                             style: TextStyle(
-                                color: widget.selectedIndex == 0
-                                    ? const Color(0xFFFEFEFE)
-                                    : Colors.black,
+                                // color: widget.selectedIndex == 0
+                                //     ? const Color(0xFFFEFEFE)
+                                //     : Colors.black,
                                 fontSize: isTablet
                                     ? (isLandscape ? 14 : 12)
                                     : (isLandscape ? 12 : 10),
@@ -194,9 +194,9 @@ class _BuildAppbarState extends State<BuildAppbar> {
                             ? (isLandscape ? 35 : 30)
                             : (isLandscape ? 30 : 25),
                         decoration: BoxDecoration(
-                          color: widget.selectedIndex == 1
-                              ? DoneStatusColor
-                              : const Color(0xFFFEFEFE),
+                          // color: widget.selectedIndex == 1
+                          //     ? DoneStatusColor
+                          //     : const Color(0xFFFEFEFE),
                           borderRadius: const BorderRadius.only(
                             topRight: Radius.circular(12),
                             bottomRight: Radius.circular(12),
@@ -206,9 +206,9 @@ class _BuildAppbarState extends State<BuildAppbar> {
                           child: Text(
                             'Selesai',
                             style: TextStyle(
-                                color: widget.selectedIndex == 1
-                                    ? const Color(0xFFFEFEFE)
-                                    : Colors.black,
+                                // color: widget.selectedIndex == 1
+                                //     ? const Color(0xFFFEFEFE)
+                                //     : Colors.black,
                                 fontSize: isTablet
                                     ? (isLandscape ? 14 : 12)
                                     : (isLandscape ? 12 : 10),
@@ -312,10 +312,10 @@ class _BuildAppbarState extends State<BuildAppbar> {
                                 fontSize: isTablet ? 14 : 12,
                                 fontWeight: FontWeight.w800,
                                 color: Colors.black),
-                            value: widget.selectedCategory,
+                            //value: widget.selectedCategory,
                             onChanged: (String? newValue) {
                               if (newValue != null) {
-                                widget.onCategoryChanged(newValue);
+                                //widget.onCategoryChanged(newValue);
                               }
                             },
                             underline: const SizedBox(),
@@ -355,20 +355,20 @@ class _BuildAppbarState extends State<BuildAppbar> {
                           color: const Color(0xFFFEFEFE),
                           borderWidth: 1,
                           isSelected: [
-                            widget.selectedIndex == 0,
-                            widget.selectedIndex == 1
+                            // widget.selectedIndex == 0,
+                            // widget.selectedIndex == 1
                           ],
                           onPressed: (int index) {
-                            widget.onItemTapped(index);
+                            //widget.onItemTapped(index);
                           },
                           children: <Widget>[
                             Container(
                               width: isTablet ? 70 : 60,
                               height: isTablet ? 30 : 25,
                               decoration: BoxDecoration(
-                                color: widget.selectedIndex == 0
-                                    ? OrderStatusColor
-                                    : const Color(0xFFFEFEFE),
+                                // color: widget.selectedIndex == 0
+                                //     ? OrderStatusColor
+                                //     : const Color(0xFFFEFEFE),
                                 borderRadius: const BorderRadius.only(
                                   topLeft: Radius.circular(12),
                                   bottomLeft: Radius.circular(12),
@@ -378,9 +378,9 @@ class _BuildAppbarState extends State<BuildAppbar> {
                                 child: Text(
                                   'Order',
                                   style: TextStyle(
-                                      color: widget.selectedIndex == 0
-                                          ? const Color(0xFFFEFEFE)
-                                          : Colors.black,
+                                      // color: widget.selectedIndex == 0
+                                      //     ? const Color(0xFFFEFEFE)
+                                      //     : Colors.black,
                                       fontSize: isTablet ? 14 : 12,
                                       fontWeight: FontWeight.w800),
                                 ),
@@ -390,9 +390,9 @@ class _BuildAppbarState extends State<BuildAppbar> {
                               width: isTablet ? 70 : 60,
                               height: isTablet ? 30 : 25,
                               decoration: BoxDecoration(
-                                color: widget.selectedIndex == 1
-                                    ? DoneStatusColor
-                                    : const Color(0xFFFEFEFE),
+                                // color: widget.selectedIndex == 1
+                                //     ? DoneStatusColor
+                                //     : const Color(0xFFFEFEFE),
                                 borderRadius: const BorderRadius.only(
                                   topRight: Radius.circular(12),
                                   bottomRight: Radius.circular(12),
@@ -402,9 +402,9 @@ class _BuildAppbarState extends State<BuildAppbar> {
                                 child: Text(
                                   'Selesai',
                                   style: TextStyle(
-                                      color: widget.selectedIndex == 1
-                                          ? const Color(0xFFFEFEFE)
-                                          : Colors.black,
+                                      // color: widget.selectedIndex == 1
+                                      //     ? const Color(0xFFFEFEFE)
+                                      //     : Colors.black,
                                       fontSize: isTablet ? 14 : 12,
                                       fontWeight: FontWeight.w800),
                                 ),

@@ -1,175 +1,400 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:kitchen/appstate.dart';
 import 'package:kitchen/core/api/frappe_thunder_authenticator/auth.dart'
     as frappeLogin;
+
 import 'package:kitchen/core/api/frappe_thunder_authenticator/user_detail.dart'
     as frappeUserDetail;
+import 'package:kitchen/core/theme/custom_button_style.dart';
+import 'package:kitchen/core/theme/theme_helper.dart';
 
-class LoginPage extends StatefulWidget {
+import 'package:kitchen/core/utils/alert.dart' as alert;
+import 'package:kitchen/core/utils/size_utils.dart';
+import 'package:kitchen/routes/app_routes.dart';
+import 'package:kitchen/widgets/custom_elevated_button.dart';
+import 'package:kitchen/widgets/custom_text_form_field.dart';
+
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({Key? key}) : super(key: key);
+
   @override
-  _LoginPageState createState() => _LoginPageState();
+  _LoginScreenState createState() => _LoginScreenState();
 }
 
-class _LoginPageState extends State<LoginPage> {
-  final _phoneController = TextEditingController();
-  final _passwordController = TextEditingController();
-  bool _isPasswordVisible = false;
-  String _errorMessage = '';
+class _LoginScreenState extends State<LoginScreen> {
+  // late LoginScreen _model;
+  final unfocusNode = FocusNode();
+  final scaffoldKey = GlobalKey<ScaffoldState>();
+  final formKey = GlobalKey<FormState>();
+  bool isLoading = false;
 
-  Future<void> _handleLogin() async {
-    final username = _phoneController.text;
-    final password = _passwordController.text;
-    final loginRequest = frappeLogin.loginRequest(username: username, password: password);
+  String? Function(BuildContext, String?)? userFieldControllerValidator;
 
-    try {
-      final response = await frappeLogin.login(loginRequest);
-      if (response['message'] == 'Logged In') {
-        SharedPreferences prefs = await SharedPreferences.getInstance();
-        prefs.setString('username', username);
-        prefs.setString('password', password);
-        Navigator.pushReplacementNamed(context, '/home');
-      } else {
-        setState(() {
-          _errorMessage = 'Invalid username or password';
-        });
-      }
-    } catch (e) {
-      setState(() {
-        _errorMessage = 'Invalid username or password';
-      });
-    }
+  @override
+  void initState() {
+    super.initState();
+    // _model = createModel(context, () => LoginPageModel());
+
+    // dynamic tmpOutlet = FFAppState().configSettingOutlet;
+    // String tmpOuletCode = FFAppState().configSettingOutletCode;
+    // dynamic tmpDevice = FFAppState().configSettingDevices;
+    // dynamic tmpPrinter = FFAppState().configSettingPrinter;
+    //
+    // _model.settingValue = FFAppState().settingValue;
+    // _model.settingOutlet = getJsonField(
+    //                                     FFAppState().settingValue,
+    //                                     r'''$.outlet''',
+    //                                   );
+    // _model.settingDevice = getJsonField(FFAppState().settingValue, r'''$.device''',);
+    // _model.settingPrinter = getJsonField(FFAppState().settingValue, r'''$.printer''',);
+
+    // userFieldController ??= TextEditingController();
+    // pwFieldController ??= TextEditingController();
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
   @override
   void dispose() {
-    _phoneController.dispose();
-    _passwordController.dispose();
+    // _model.dispose();
+
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Align(
-              alignment: Alignment.topRight,
-              child: Image.asset(
-                'assets/image/logo-kontena.png',
-                height: 80,
-              ),
-            ),
-            Align(
-              alignment: Alignment.centerRight,
-              child: Text(
-                'House Keeping',
-                style: TextStyle(
-                  fontSize: 10,
-                  fontWeight: FontWeight.normal,
-                  fontFamily: 'OpenSans',
+    // context.watch<FFAppState>();
+
+    return GestureDetector(
+      onTap: () => unfocusNode.canRequestFocus
+          ? FocusScope.of(context).requestFocus(unfocusNode)
+          : FocusScope.of(context).unfocus(),
+      child: Scaffold(
+        key: scaffoldKey,
+        backgroundColor: theme.colorScheme.primaryContainer,
+        body: SafeArea(
+          child: Center(
+            child: SingleChildScrollView(
+              scrollDirection: Axis.vertical,
+              child: Padding(
+                padding:
+                    const EdgeInsetsDirectional.fromSTEB(0.0, 60.0, 0.0, 60.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Row(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Container(
+                          width: MediaQuery.sizeOf(context).width * 0.5,
+                          decoration: BoxDecoration(
+                            color: theme.colorScheme.primaryContainer,
+                            border: Border.all(
+                              color: theme.colorScheme.surface,
+                              width: 2,
+                            ),
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsetsDirectional.fromSTEB(
+                              30.0,
+                              80.0,
+                              30.0,
+                              80.0,
+                            ),
+                            child: SingleChildScrollView(
+                              child: Column(
+                                mainAxisSize: MainAxisSize.max,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Image.asset(
+                                    'assets/images/app_launcher_icon.png',
+                                    height: 165.v,
+                                    width: 165.v,
+                                  ),
+                                  Column(
+                                    mainAxisSize: MainAxisSize.max,
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'Login',
+                                        style: theme.textTheme.titleMedium,
+                                      ),
+                                      Text(
+                                        'Masukkan username & password untuk melanjutkan',
+                                        style: theme.textTheme.labelSmall,
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsetsDirectional
+                                            .fromSTEB(
+                                          0.0,
+                                          16.0,
+                                          0.0,
+                                          16.0,
+                                        ),
+                                        child: Form(
+                                          key: formKey,
+                                          autovalidateMode:
+                                              AutovalidateMode.disabled,
+                                          child: Column(
+                                            mainAxisSize: MainAxisSize.max,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsetsDirectional
+                                                        .fromSTEB(
+                                                  0.0,
+                                                  0.0,
+                                                  0.0,
+                                                  16.0,
+                                                ),
+                                                child: _buildPhoneNumberSection(
+                                                  context,
+                                                ),
+                                              ),
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsetsDirectional
+                                                        .fromSTEB(
+                                                  0.0,
+                                                  0.0,
+                                                  0.0,
+                                                  16.0,
+                                                ),
+                                                child: _buildPasswordSection(
+                                                    context),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                      if (isLoading)
+                                        Container(
+                                          width: double.infinity,
+                                          height: 48.0,
+                                          decoration: BoxDecoration(
+                                            color: theme.colorScheme.primary,
+                                            borderRadius:
+                                                BorderRadius.circular(8.0),
+                                          ),
+                                          child: Padding(
+                                            padding:
+                                                EdgeInsetsDirectional.fromSTEB(
+                                                    8.0, 0.0, 8.0, 0.0),
+                                            child: Row(
+                                              mainAxisSize: MainAxisSize.max,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                Center(
+                                                  child: Container(
+                                                    width: 23,
+                                                    height: 23,
+                                                    child:
+                                                        CircularProgressIndicator(
+                                                      valueColor:
+                                                          AlwaysStoppedAnimation<
+                                                              Color>(
+                                                        Colors.white,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                                Padding(
+                                                  padding: EdgeInsetsDirectional
+                                                      .fromSTEB(
+                                                          10.0, 0.0, 8.0, 0.0),
+                                                  child: Text(
+                                                    'Loading...',
+                                                    style: TextStyle(
+                                                        color: theme.colorScheme
+                                                            .primaryContainer),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      if (isLoading == false)
+                                        CustomElevatedButton(
+                                          text: "Masuk",
+                                          buttonTextStyle: TextStyle(
+                                              color: theme.colorScheme
+                                                  .primaryContainer),
+                                          buttonStyle:
+                                              CustomButtonStyles.primaryButton,
+                                          onPressed: () {
+                                            onTapMasuk(context);
+                                          },
+                                        ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
-                textAlign: TextAlign.left,
               ),
             ),
-            SizedBox(height: 20),
-            Container(
-              padding: const EdgeInsets.all(32.0),
-              decoration: BoxDecoration(
-                color: Colors.grey.withOpacity(0.1),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Column(
-                children: <Widget>[
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      'Login',
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'OpenSans',
-                      ),
-                      textAlign: TextAlign.left,
-                    ),
-                  ),
-                  SizedBox(height: 4),
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      'Masukkan Username dan Password anda',
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.normal,
-                        fontFamily: 'OpenSans',
-                      ),
-                      textAlign: TextAlign.left,
-                    ),
-                  ),
-                  SizedBox(height: 16),
-                  TextField(
-                    controller: _phoneController,
-                    decoration: InputDecoration(
-                      labelText: 'Nomor Handphone',
-                      labelStyle: TextStyle(fontFamily: 'OpenSans'),
-                      errorText: _errorMessage.isEmpty ? null : _errorMessage,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ),
-                    keyboardType: TextInputType.phone,
-                  ),
-                  SizedBox(height: 20),
-                  TextField(
-                    controller: _passwordController,
-                    decoration: InputDecoration(
-                      labelText: 'Password Anda',
-                      labelStyle: TextStyle(fontFamily: 'OpenSans'),
-                      errorText: _errorMessage.isEmpty ? null : _errorMessage,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      suffixIcon: IconButton(
-                        icon: Icon(
-                          _isPasswordVisible
-                              ? Icons.visibility
-                              : Icons.visibility_off,
-                        ),
-                        onPressed: () {
-                          setState(() {
-                            _isPasswordVisible = !_isPasswordVisible;
-                          });
-                        },
-                      ),
-                    ),
-                    obscureText: !_isPasswordVisible,
-                  ),
-                  SizedBox(height: 30),
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Color(0xFF27ae60),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                      ),
-                      onPressed: _handleLogin,
-                      child: Text('Login',
-                          style: TextStyle(
-                              fontFamily: 'OpenSans',
-                              color: Colors.white,
-                              fontSize: 14)),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
+          ),
         ),
-     ),
-);
-}
+      ),
+    );
+  }
+
+  // widget input phone
+  TextEditingController enterPhoneController = TextEditingController();
+  FocusNode inputPhone = FocusNode();
+  Widget _buildPhoneNumberSection(BuildContext context) {
+    // enterPhoneController.text = 'administrator';
+    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      CustomTextFormField(
+        controller: enterPhoneController,
+        focusNode: inputPhone,
+        contentPadding: EdgeInsets.symmetric(
+          horizontal: 3.h,
+          vertical: 12.v,
+        ),
+        hintText: "Masukin no hp / email mu",
+        validator: (value) {
+          if (value == null || value.isEmpty) {
+            return 'Nomor HP / Email tidak boleh kosong';
+          }
+          return null;
+        },
+        onTapOutside: (value) {
+          inputPhone.unfocus();
+        },
+      ),
+    ]);
+  }
+
+  // widget password
+  TextEditingController enterPasswordController = TextEditingController();
+  FocusNode inputPassword = FocusNode();
+  late bool _obscurePassword = true;
+  Widget _buildPasswordSection(BuildContext context) {
+    // enterPasswordController.text = 'adminkontena';
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        CustomTextFormField(
+          controller: enterPasswordController,
+          focusNode: inputPassword,
+          obscureText: _obscurePassword,
+          contentPadding: EdgeInsets.symmetric(
+            horizontal: 3.h,
+            vertical: 9.v,
+          ),
+          hintText: "Masukin password mu",
+          suffix: IconButton(
+            icon: Icon(
+              _obscurePassword ? Icons.visibility : Icons.visibility_off,
+            ),
+            color: appTheme.gray500,
+            onPressed: _togglePasswordView,
+          ),
+          textInputAction: TextInputAction.done,
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return 'Password tidak boleh kosong';
+            }
+            return null;
+          },
+          onTapOutside: (value) {
+            inputPassword.unfocus();
+          },
+          onEditingComplete: () {
+            // print('debug');
+            inputPassword.unfocus();
+            onTapMasuk(context);
+          },
+        ),
+      ],
+    );
+  }
+
+  void _togglePasswordView() {
+    setState(() {
+      _obscurePassword = !_obscurePassword;
+    });
+  }
+
+  void onTapMasuk(BuildContext context) async {
+    if (enterPhoneController.text != '' && enterPasswordController.text != '') {
+      setState(() {
+        isLoading = true;
+      });
+
+      final frappeLogin.loginRequest request = frappeLogin.loginRequest(
+        username: enterPhoneController.text,
+        password: enterPasswordController.text,
+      );
+
+      try {
+        Map<String, dynamic> result = await frappeLogin.login(request);
+
+        if ((result.containsKey('message')) &&
+            (result['message'] == 'Logged In')) {
+          final frappeUserDetail.UserDetailRequest requestUser =
+              frappeUserDetail.UserDetailRequest(
+            cookie: AppState().setCookie,
+            id: enterPhoneController.text,
+          );
+
+          final callRequestUser =
+              await frappeUserDetail.request(requestQuery: requestUser).timeout(
+                    Duration(seconds: 30),
+                  );
+          //print('check data req user, ${callRequestUser}');
+          if (callRequestUser.isNotEmpty) {
+            setState(() {
+              AppState().configUser = callRequestUser;
+            });
+          }
+          setState(() {
+            isLoading = false;
+          });
+          if (context.mounted) {
+          Navigator.pushReplacementNamed(context, AppRoutes.orderScreen);
+          }
+            return; // Keluar dari fungsi setelah navigasi
+
+        }
+
+        // print('header, ${AppState().setCookie}');
+      } catch (error) {
+        if (error.toString() == 'Exception: Authentication Error!') {
+          enterPasswordController.text = '';
+          enterPhoneController.text = '';
+          if (context.mounted) {
+            alert.alertError(context, 'Sepertinya akun atau passwordmu salah');
+          }
+        } else {
+          if (context.mounted) {
+            alert.alertError(context, error.toString());
+          }
+        }
+      }
+
+      setState(() {
+        isLoading = false;
+      });
+    } else {
+      alert.alertError(context, 'Data Belum Lengkap!');
+    }
+  }
 }

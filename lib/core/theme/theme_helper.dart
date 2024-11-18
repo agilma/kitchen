@@ -168,8 +168,6 @@ class ColorSchemes {
     primaryContainer: Color(0XFFFFFFFF),
     secondaryContainer: Color(0XFFE6F5FB),
 
-    background: Color(0xFFEEEEEE),
-
     surface: Color(0XFFF5F5F5),
     // #234, 239, 240, 255
 

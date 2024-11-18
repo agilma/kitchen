@@ -99,8 +99,13 @@ class AppState extends ChangeNotifier {
   late SharedPreferences prefs;
 
   double _totalPrice = 0.0;
-
+  String _domain = 'https://erp2.hotelkontena.com';
+  String get domain => _domain;
   double get totalPrice => _totalPrice;
+  set domain(String _value) {
+    _domain = _value;
+    prefs.setString('ff_domain', _value);
+  }
 
   void resetCart() {
     // _cartItems = [];
