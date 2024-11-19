@@ -60,6 +60,7 @@ class _OrderScreenState extends State<OrderScreen> {
     return Scaffold(
       key: scaffoldKey,
       backgroundColor: theme.colorScheme.background,
+      appBar: BuildAppbar(),
       body: SafeArea(
         top: true,
         child: Column(
@@ -97,10 +98,9 @@ class _OrderScreenState extends State<OrderScreen> {
                                                 physics: const BouncingScrollPhysics(),
                                                 itemCount: servedDisplay.length,
                                                 itemBuilder: (context, index) {
-                                                  final order =
-                                                      servedDisplay[index];
-                                                  dynamic orderItemList =
-                                                      order['items'];
+                                                  final order = servedDisplay[index];
+                                                  dynamic orderItemList = order['items'];
+                                                  print('Isi orderItemList pada index $index: $orderItemList');
                                                   return InkWell(
                                                     onTap: () {
                                                       // addToCartFromOrder(
@@ -189,12 +189,8 @@ class _OrderScreenState extends State<OrderScreen> {
                                                                         ),
                                                                         shrinkWrap:
                                                                             true,
-                                                                        itemCount:
-                                                                            orderItemList
-                                                                                .length,
-                                                                        itemBuilder:
-                                                                            (context,
-                                                                                idx) {
+                                                                        itemCount:orderItemList.length,
+                                                                        itemBuilder:(context, idx) {
                                                                           dynamic
                                                                               orderItem =
                                                                               orderItemList[idx];
@@ -374,7 +370,7 @@ class _OrderScreenState extends State<OrderScreen> {
         dynamic tmp = cartTemp;
         // print('temp order, $tempPosOrder');
         tmp['items'] = tempPosServed
-            .where((ord) => ord['kitchen_cart'] == tmp['name'])
+            .where((ord) => ord['pos_cart'] == tmp['name'])
             .toList();
         cartNew.add(tmp);
       }

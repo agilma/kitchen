@@ -32,7 +32,7 @@ class BuildAppbar extends StatefulWidget implements PreferredSizeWidget {
 
 class _BuildAppbarState extends State<BuildAppbar> {
   List<Map<String, dynamic>> dataOrder = [];
-
+  int selectedIndex = 0;
   @override
   void initState() {
     super.initState();
@@ -149,8 +149,8 @@ class _BuildAppbarState extends State<BuildAppbar> {
                     color: const Color(0xFFFEFEFE),
                     borderWidth: 1,
                     isSelected: [
-                      // widget.selectedIndex == 0,
-                      // widget.selectedIndex == 1
+                      selectedIndex == 0,
+                      selectedIndex == 1
                     ],
                     onPressed: (int index) {
                       //widget.onItemTapped(index);
