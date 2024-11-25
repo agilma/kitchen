@@ -164,9 +164,9 @@ class _BuildAppbarState extends State<BuildAppbar> {
                             ? (isLandscape ? 35 : 30)
                             : (isLandscape ? 30 : 25),
                         decoration: BoxDecoration(
-                          // color: widget.selectedIndex == 0
-                          //     ? OrderStatusColor
-                          //     : const Color(0xFFFEFEFE),
+                          // color: selectedIndex == 0
+                          // OrderStatusColor
+                          // const Color(0xFFFEFEFE),
                           borderRadius: const BorderRadius.only(
                             topLeft: Radius.circular(12),
                             bottomLeft: Radius.circular(12),
@@ -348,70 +348,70 @@ class _BuildAppbarState extends State<BuildAppbar> {
                           borderRadius: BorderRadius.circular(12),
                           border: Border.all(color: Colors.transparent),
                         ),
-                        child: ToggleButtons(
-                          borderRadius: BorderRadius.circular(12),
-                          fillColor: Colors.transparent,
-                          selectedColor: const Color(0xFFFEFEFE),
-                          color: const Color(0xFFFEFEFE),
-                          borderWidth: 1,
-                          isSelected: [
-                            // widget.selectedIndex == 0,
-                            // widget.selectedIndex == 1
-                          ],
-                          onPressed: (int index) {
-                            //widget.onItemTapped(index);
-                          },
-                          children: <Widget>[
-                            Container(
-                              width: isTablet ? 70 : 60,
-                              height: isTablet ? 30 : 25,
-                              decoration: BoxDecoration(
-                                // color: widget.selectedIndex == 0
-                                //     ? OrderStatusColor
-                                //     : const Color(0xFFFEFEFE),
-                                borderRadius: const BorderRadius.only(
-                                  topLeft: Radius.circular(12),
-                                  bottomLeft: Radius.circular(12),
-                                ),
-                              ),
-                              child: Center(
-                                child: Text(
-                                  'Order',
-                                  style: TextStyle(
-                                      // color: widget.selectedIndex == 0
-                                      //     ? const Color(0xFFFEFEFE)
-                                      //     : Colors.black,
-                                      fontSize: isTablet ? 14 : 12,
-                                      fontWeight: FontWeight.w800),
-                                ),
-                              ),
-                            ),
-                            Container(
-                              width: isTablet ? 70 : 60,
-                              height: isTablet ? 30 : 25,
-                              decoration: BoxDecoration(
-                                // color: widget.selectedIndex == 1
-                                //     ? DoneStatusColor
-                                //     : const Color(0xFFFEFEFE),
-                                borderRadius: const BorderRadius.only(
-                                  topRight: Radius.circular(12),
-                                  bottomRight: Radius.circular(12),
-                                ),
-                              ),
-                              child: Center(
-                                child: Text(
-                                  'Selesai',
-                                  style: TextStyle(
-                                      // color: widget.selectedIndex == 1
-                                      //     ? const Color(0xFFFEFEFE)
-                                      //     : Colors.black,
-                                      fontSize: isTablet ? 14 : 12,
-                                      fontWeight: FontWeight.w800),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
+                        // child: ToggleButtons(
+                        //   borderRadius: BorderRadius.circular(12),
+                        //   fillColor: Colors.transparent,
+                        //   selectedColor: const Color(0xFFFEFEFE),
+                        //   color: const Color(0xFFFEFEFE),
+                        //   borderWidth: 1,
+                        //   isSelected: [
+                        //     // widget.selectedIndex == 0,
+                        //     // widget.selectedIndex == 1
+                        //   ],
+                        //   onPressed: (int index) {
+                        //     //widget.onItemTapped(index);
+                        //   },
+                        //   children: <Widget>[
+                        //     Container(
+                        //       width: isTablet ? 70 : 60,
+                        //       height: isTablet ? 30 : 25,
+                        //       decoration: BoxDecoration(
+                        //         // color: widget.selectedIndex == 0
+                        //         //     ? OrderStatusColor
+                        //         //     : const Color(0xFFFEFEFE),
+                        //         borderRadius: const BorderRadius.only(
+                        //           topLeft: Radius.circular(12),
+                        //           bottomLeft: Radius.circular(12),
+                        //         ),
+                        //       ),
+                        //       child: Center(
+                        //         child: Text(
+                        //           'Order',
+                        //           style: TextStyle(
+                        //               // color: widget.selectedIndex == 0
+                        //               //     ? const Color(0xFFFEFEFE)
+                        //               //     : Colors.black,
+                        //               fontSize: isTablet ? 14 : 12,
+                        //               fontWeight: FontWeight.w800),
+                        //         ),
+                        //       ),
+                        //     ),
+                        //     Container(
+                        //       width: isTablet ? 70 : 60,
+                        //       height: isTablet ? 30 : 25,
+                        //       decoration: BoxDecoration(
+                        //         // color: widget.selectedIndex == 1
+                        //         //     ? DoneStatusColor
+                        //         //     : const Color(0xFFFEFEFE),
+                        //         borderRadius: const BorderRadius.only(
+                        //           topRight: Radius.circular(12),
+                        //           bottomRight: Radius.circular(12),
+                        //         ),
+                        //       ),
+                        //       child: Center(
+                        //         child: Text(
+                        //           'Selesai',
+                        //           style: TextStyle(
+                        //               // color: widget.selectedIndex == 1
+                        //               //     ? const Color(0xFFFEFEFE)
+                        //               //     : Colors.black,
+                        //               fontSize: isTablet ? 14 : 12,
+                        //               fontWeight: FontWeight.w800),
+                        //         ),
+                        //       ),
+                        //     ),
+                        //   ],
+                        // ),
                       ),
                     ),
                     SizedBox(width: isTablet ? 100 : 10),
