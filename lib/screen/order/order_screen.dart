@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:kitchen/appstate.dart';
 import 'package:kitchen/constants.dart';
@@ -30,7 +31,9 @@ class _OrderScreenState extends State<OrderScreen> {
   List<dynamic> tempPosServed = [];
   List<dynamic> servedDisplay = [];
   List<dynamic> tempPosCart = [];
-
+  
+  DateTime? lastOrderTimestamp;
+  Timer? timer;
   bool isLoadingContent = false;
 
   //final soLoud = SoLoud.instance;
@@ -55,6 +58,10 @@ class _OrderScreenState extends State<OrderScreen> {
     if (servedDisplay.isEmpty) {
       onTapRefreshHistory();
     }
+    timer = Timer.periodic(const Duration(seconds: 10), (timer) {
+        print('halaman di refresh');
+        onTapRefreshHistory();
+    });
   }
   @override
   Widget build(BuildContext context) {
@@ -370,6 +377,7 @@ class _OrderScreenState extends State<OrderScreen> {
           tempPosServed = callRequest;
           //loadAndPlayAudio();
         });
+        onCheckNewOrder();
       }
     } catch (error) {
       print('error call data pos order, $error');
@@ -401,87 +409,127 @@ class _OrderScreenState extends State<OrderScreen> {
     // onTapRefreshOrder();
   }
 
-  onPrintChecker(bool reprint) async {
-    dynamic docPrint = await printChecker(
-      cartSelected,
-      AppState().configPrinter,
-      AppState().configApplication,
-      reprint ? 'reprint' : null,
-    );
+  // onPrintChecker(bool reprint) async {
+  //   dynamic docPrint = await printChecker(
+  //     cartSelected,
+  //     AppState().configPrinter,
+  //     AppState().configApplication,
+  //     reprint ? 'reprint' : null,
+  //   );
 
-    print('print, $docPrint');
+  //   print('print, $docPrint');
 
-    final sendToPrinter.ToPrint request =
-        sendToPrinter.ToPrint(doc: docPrint, ipAddress: '127.0.0.1');
-    try {
-      final callRespon = await sendToPrinter.request(requestQuery: request);
-      print('call respon, ${callRespon}');
-      if (callRespon != null) {
-        // setState((){
-        //   paymentStatus = true;
-        //   invoice = callRespon;
-        // });
-      }
-    } catch (error) {
-      print('error pos invoice, ${error}');
-      if (mounted) {
-        alertError(context, error.toString());
+  //   final sendToPrinter.ToPrint request =
+  //       sendToPrinter.ToPrint(doc: docPrint, ipAddress: '127.0.0.1');
+  //   try {
+  //     final callRespon = await sendToPrinter.request(requestQuery: request);
+  //     print('call respon, ${callRespon}');
+  //     if (callRespon != null) {
+  //       // setState((){
+  //       //   paymentStatus = true;
+  //       //   invoice = callRespon;
+  //       // });
+  //     }
+  //   } catch (error) {
+  //     print('error pos invoice, ${error}');
+  //     if (mounted) {
+  //       alertError(context, error.toString());
+  //     }
+  //   }
+  // }
+
+  // onPrintCheckerBluetooth(bool reprint) async {
+  //   bool connectionStatus = await PrintBluetoothThermal.connectionStatus;
+  //   if (connectionStatus) {
+  //     bool result = false;
+  //     List<int> ticket = await printCheckerBluetooth(
+  //       cartSelected,
+  //       AppState().configPrinter,
+  //       AppState().configApplication,
+  //       reprint ? 'reprint' : null,
+  //     );
+  //     result = await PrintBluetoothThermal.writeBytes(ticket);
+  //     print('result print, $result');
+  //   }
+  // }
+
+  // Future<List<int>> testTicket() async {
+  //   List<int> bytes = [];
+  //   // Using default profile
+  //   final profile = await CapabilityProfile.load();
+  //   final generator = Generator(PaperSize.mm80, profile);
+  //   //bytes += generator.setGlobalFont(PosFontType.fontA);
+  //   bytes += generator.reset();
+
+  //   // final ByteData data = await rootBundle.load('assets/mylogo.jpg');
+  //   // final Uint8List bytesImg = data.buffer.asUint8List();
+  //   // img.Image? image = img.decodeImage(bytesImg);
+
+  //   bytes += generator.text('Bold text', styles: const PosStyles(bold: true));
+  //   bytes +=
+  //       generator.text('Reverse text', styles: const PosStyles(reverse: true));
+  //   bytes += generator.text('Underlined text',
+  //       styles: const PosStyles(underline: true), linesAfter: 1);
+  //   bytes += generator.text('Align left',
+  //       styles: const PosStyles(align: PosAlign.left));
+  //   bytes += generator.text('Align center',
+  //       styles: const PosStyles(align: PosAlign.center));
+  //   bytes += generator.text('Align right',
+  //       styles: const PosStyles(align: PosAlign.right), linesAfter: 1);
+
+  //   bytes += generator.row([
+  //     PosColumn(
+  //       text: 'col5',
+  //       width: 6,
+  //       styles: const PosStyles(align: PosAlign.left, underline: true),
+  //     ),
+  //     PosColumn(
+  //       text: 'col7',
+  //       width: 6,
+  //       styles: const PosStyles(align: PosAlign.right, underline: true),
+  //     ),
+  //   ]);
+
+  //   return bytes;
+  // }
+  onCheckNewOrder() async {
+  const Duration minOrderAge = Duration(minutes: 2);
+
+  if (tempPosServed.isNotEmpty) {
+    List<dynamic> temp = tempPosServed;
+    temp.sort((a, b) => b['creation'].compareTo(a['creation']));
+    final latestOrder = temp.isNotEmpty ? temp.first : null;
+
+    if (latestOrder != null) {
+      bool isNewOrder = lastOrderTimestamp == null ||
+          DateTime.parse(latestOrder['creation'])
+              .isAfter(lastOrderTimestamp!);
+      bool isOlderThanMinAge = DateTime.now()
+              .difference(DateTime.parse(latestOrder['creation'])) >=
+          minOrderAge;
+
+      if (isNewOrder &&
+          (latestOrder['docstatus'] == 0) &&
+          (isOlderThanMinAge == false)) {
+        lastOrderTimestamp = DateTime.parse(latestOrder['creation']);
+        onTapRefreshHistory();
+        //loadAndPlayAudio();
+
+        // Tambahkan logika untuk mencetak
+        try {
+          // Pilih metode cetak berdasarkan kebutuhan
+          // Menggunakan cetak Bluetooth
+          //await onPrintCheckerBluetooth(false);
+
+          // Jika ingin menggunakan metode cetak lain, gunakan berikut:
+          // await onPrintChecker(false);
+
+          print("Order printed successfully.");
+        } catch (error) {
+          print("Failed to print the order: $error");
+        }
       }
     }
   }
-
-  onPrintCheckerBluetooth(bool reprint) async {
-    bool connectionStatus = await PrintBluetoothThermal.connectionStatus;
-    if (connectionStatus) {
-      bool result = false;
-      List<int> ticket = await printCheckerBluetooth(
-        cartSelected,
-        AppState().configPrinter,
-        AppState().configApplication,
-        reprint ? 'reprint' : null,
-      );
-      result = await PrintBluetoothThermal.writeBytes(ticket);
-      print('result print, $result');
-    }
-  }
-
-  Future<List<int>> testTicket() async {
-    List<int> bytes = [];
-    // Using default profile
-    final profile = await CapabilityProfile.load();
-    final generator = Generator(PaperSize.mm80, profile);
-    //bytes += generator.setGlobalFont(PosFontType.fontA);
-    bytes += generator.reset();
-
-    // final ByteData data = await rootBundle.load('assets/mylogo.jpg');
-    // final Uint8List bytesImg = data.buffer.asUint8List();
-    // img.Image? image = img.decodeImage(bytesImg);
-
-    bytes += generator.text('Bold text', styles: const PosStyles(bold: true));
-    bytes +=
-        generator.text('Reverse text', styles: const PosStyles(reverse: true));
-    bytes += generator.text('Underlined text',
-        styles: const PosStyles(underline: true), linesAfter: 1);
-    bytes += generator.text('Align left',
-        styles: const PosStyles(align: PosAlign.left));
-    bytes += generator.text('Align center',
-        styles: const PosStyles(align: PosAlign.center));
-    bytes += generator.text('Align right',
-        styles: const PosStyles(align: PosAlign.right), linesAfter: 1);
-
-    bytes += generator.row([
-      PosColumn(
-        text: 'col5',
-        width: 6,
-        styles: const PosStyles(align: PosAlign.left, underline: true),
-      ),
-      PosColumn(
-        text: 'col7',
-        width: 6,
-        styles: const PosStyles(align: PosAlign.right, underline: true),
-      ),
-    ]);
-
-    return bytes;
-  }
+}
 }
