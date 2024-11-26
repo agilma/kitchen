@@ -33,23 +33,6 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   void initState() {
     super.initState();
-    // _model = createModel(context, () => LoginPageModel());
-
-    // dynamic tmpOutlet = FFAppState().configSettingOutlet;
-    // String tmpOuletCode = FFAppState().configSettingOutletCode;
-    // dynamic tmpDevice = FFAppState().configSettingDevices;
-    // dynamic tmpPrinter = FFAppState().configSettingPrinter;
-    //
-    // _model.settingValue = FFAppState().settingValue;
-    // _model.settingOutlet = getJsonField(
-    //                                     FFAppState().settingValue,
-    //                                     r'''$.outlet''',
-    //                                   );
-    // _model.settingDevice = getJsonField(FFAppState().settingValue, r'''$.device''',);
-    // _model.settingPrinter = getJsonField(FFAppState().settingValue, r'''$.printer''',);
-
-    // userFieldController ??= TextEditingController();
-    // pwFieldController ??= TextEditingController();
     WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
@@ -89,7 +72,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Container(
-                          width: MediaQuery.sizeOf(context).width * 0.5,
+                          width: MediaQuery.sizeOf(context).width * 0.85,
+                          height: MediaQuery.sizeOf(context).height * 0.85,
                           decoration: BoxDecoration(
                             color: theme.colorScheme.primaryContainer,
                             border: Border.all(

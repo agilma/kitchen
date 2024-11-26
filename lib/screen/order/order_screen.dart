@@ -5,12 +5,13 @@ import 'package:kitchen/constants.dart';
 import 'package:kitchen/core/theme/theme_helper.dart';
 import 'package:kitchen/core/utils/alert.dart';
 import 'package:kitchen/core/utils/datetime_ui.dart';
+import 'package:kitchen/routes/app_routes.dart';
 import 'package:kitchen/screen/components/appbar_section.dart';
 import 'package:kitchen/core/api/frappe_kitchen/kitchen_cart.dart'
     as FrappeFetchDataGetCart;
 import 'package:kitchen/core/api/frappe_kitchen/kitchen_delivery.dart'
     as FrappeFetchDataGetDelivery;
-//import 'package:flutter_soloud/flutter_soloud.dart';
+import 'package:flutter_soloud/flutter_soloud.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:kitchen/widgets/empty_data.dart';
@@ -36,7 +37,7 @@ class _OrderScreenState extends State<OrderScreen> {
   Timer? timer;
   bool isLoadingContent = false;
 
-  //final soLoud = SoLoud.instance;
+  final soLoud = SoLoud.instance;
 
   void _fadeOutIn() async {
     setState(() {
@@ -47,31 +48,34 @@ class _OrderScreenState extends State<OrderScreen> {
       _opacity = 1.0;
     });
   }
-  // void _initializeAudio() async {
-  //   await soLoud.init();
-  // }
+  void _initializeAudio() async {
+     await soLoud.init();
+   }
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      _initializeAudio();
     });
     if (servedDisplay.isEmpty) {
       onTapRefreshHistory();
     }
     timer = Timer.periodic(const Duration(seconds: 10), (timer) {
-        print('halaman di refresh');
+        //print('halaman di refresh');
         onTapRefreshHistory();
     });
   }
   @override
   Widget build(BuildContext context) {
+  final isPortrait = MediaQuery.of(context).orientation == Orientation.portrait;
+  final crossAxisCount = isPortrait ? 1 : 2;
     return Scaffold(
       key: scaffoldKey,
       backgroundColor: theme.colorScheme.background,
       appBar: AppBar(
   backgroundColor: HeaderColor,
   leading: IconButton(
-    icon: const Icon(Icons.refresh),
+    icon: const Icon(Icons.refresh,color: Colors.black,),
     onPressed: () {
       onTapRefreshHistory();
     },
@@ -88,6 +92,14 @@ class _OrderScreenState extends State<OrderScreen> {
       ),
     ],
   ),
+  actions: [
+    MaterialButton(
+      onPressed: (){
+        onLogOut(context);
+      },
+      child: Icon(Icons.logout,color: Colors.black),
+      )
+  ],
 ),
 
       body: SafeArea(
@@ -116,7 +128,7 @@ class _OrderScreenState extends State<OrderScreen> {
                                                 height: MediaQuery.of(context).size.height * 0.8,
                                                 width: MediaQuery.of(context).size.width*0.9,
                                                 child: AlignedGridView.count(
-                                                  crossAxisCount: 2,
+                                                  crossAxisCount: crossAxisCount,
                                                   mainAxisSpacing: 2,
                                                   crossAxisSpacing: 6,
                                                   //shrinkWrap: true,
@@ -137,7 +149,7 @@ class _OrderScreenState extends State<OrderScreen> {
                                                             Padding(
                                                               padding:
                                                                   const EdgeInsetsDirectional
-                                                                      .fromSTEB( 16.0,16.0,16.0, 10.0),
+                                                                      .fromSTEB( 10,16.0,16.0, 10.0),
                                                               child: Column(
                                                                 crossAxisAlignment:
                                                                     CrossAxisAlignment.start,
@@ -513,7 +525,7 @@ class _OrderScreenState extends State<OrderScreen> {
           (isOlderThanMinAge == false)) {
         lastOrderTimestamp = DateTime.parse(latestOrder['creation']);
         onTapRefreshHistory();
-        //loadAndPlayAudio();
+        loadAndPlayAudio();
 
         // Tambahkan logika untuk mencetak
         try {
@@ -532,4 +544,18 @@ class _OrderScreenState extends State<OrderScreen> {
     }
   }
 }
+loadAndPlayAudio() async {
+    final audioSource =
+        await soLoud.loadAsset('assets/audio/delivery_notif.mp3');
+    final soundHandle = await soLoud.play(audioSource);
+    print('Audio played');
+  }
+
+onLogOut(BuildContext context) async {
+    // await myMe.removeStoredUser();
+    Navigator.of(context).pushNamedAndRemoveUntil(
+      AppRoutes.loginScreen,
+      (route) => false,
+    );
+  }
 }

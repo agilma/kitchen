@@ -81,13 +81,6 @@ class _MyAppState extends State<MyApp> {
     return FutureBuilder<String>(
       future: _initialRouteFuture,
       builder: (context, snapshot) {
-        if (Platform.isAndroid || Platform.isIOS) {
-          SystemChrome.setPreferredOrientations([
-            DeviceOrientation.landscapeLeft,
-            DeviceOrientation.landscapeRight,
-          ]);
-        }
-
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
         } else if (snapshot.hasError) {
