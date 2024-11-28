@@ -1,21 +1,25 @@
 import 'dart:async';
+import 'package:esc_pos_utils_plus/esc_pos_utils_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:kitchen/appstate.dart';
 import 'package:kitchen/constants.dart';
 import 'package:kitchen/core/theme/theme_helper.dart';
 import 'package:kitchen/core/utils/alert.dart';
 import 'package:kitchen/core/utils/datetime_ui.dart';
+import 'package:kitchen/core/utils/print.dart';
 import 'package:kitchen/routes/app_routes.dart';
 import 'package:kitchen/screen/components/appbar_section.dart';
 import 'package:kitchen/core/api/frappe_kitchen/kitchen_cart.dart'
     as FrappeFetchDataGetCart;
 import 'package:kitchen/core/api/frappe_kitchen/kitchen_delivery.dart'
     as FrappeFetchDataGetDelivery;
+import 'package:kitchen/core/api/send_printer.dart' as sendToPrinter;
 import 'package:flutter_soloud/flutter_soloud.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:kitchen/widgets/empty_data.dart';
 import 'package:kitchen/widgets/loading_content.dart';
+import 'package:print_bluetooth_thermal/print_bluetooth_thermal.dart';
 
 class OrderScreen extends StatefulWidget {
   const OrderScreen({
@@ -32,6 +36,8 @@ class _OrderScreenState extends State<OrderScreen> {
   List<dynamic> tempPosServed = [];
   List<dynamic> servedDisplay = [];
   List<dynamic> tempPosCart = [];
+  
+  dynamic cartSelected;
   
   DateTime? lastOrderTimestamp;
   Timer? timer;
@@ -421,89 +427,89 @@ class _OrderScreenState extends State<OrderScreen> {
     // onTapRefreshOrder();
   }
 
-  // onPrintChecker(bool reprint) async {
-  //   dynamic docPrint = await printChecker(
-  //     cartSelected,
-  //     AppState().configPrinter,
-  //     AppState().configApplication,
-  //     reprint ? 'reprint' : null,
-  //   );
+  onPrintChecker(bool reprint) async {
+    dynamic docPrint = await printChecker(
+      cartSelected,
+      AppState().configPrinter,
+      AppState().configApplication,
+      reprint ? 'reprint' : null,
+    );
 
-  //   print('print, $docPrint');
+    print('print, $docPrint');
 
-  //   final sendToPrinter.ToPrint request =
-  //       sendToPrinter.ToPrint(doc: docPrint, ipAddress: '127.0.0.1');
-  //   try {
-  //     final callRespon = await sendToPrinter.request(requestQuery: request);
-  //     print('call respon, ${callRespon}');
-  //     if (callRespon != null) {
-  //       // setState((){
-  //       //   paymentStatus = true;
-  //       //   invoice = callRespon;
-  //       // });
-  //     }
-  //   } catch (error) {
-  //     print('error pos invoice, ${error}');
-  //     if (mounted) {
-  //       alertError(context, error.toString());
-  //     }
-  //   }
-  // }
+    final sendToPrinter.ToPrint request =
+        sendToPrinter.ToPrint(doc: docPrint, ipAddress: '127.0.0.1');
+    try {
+      final callRespon = await sendToPrinter.request(requestQuery: request);
+      print('call respon, ${callRespon}');
+      if (callRespon != null) {
+        // setState((){
+        //   paymentStatus = true;
+        //   invoice = callRespon;
+        // });
+      }
+    } catch (error) {
+      print('error pos invoice, ${error}');
+      if (mounted) {
+        alertError(context, error.toString());
+      }
+    }
+  }
 
-  // onPrintCheckerBluetooth(bool reprint) async {
-  //   bool connectionStatus = await PrintBluetoothThermal.connectionStatus;
-  //   if (connectionStatus) {
-  //     bool result = false;
-  //     List<int> ticket = await printCheckerBluetooth(
-  //       cartSelected,
-  //       AppState().configPrinter,
-  //       AppState().configApplication,
-  //       reprint ? 'reprint' : null,
-  //     );
-  //     result = await PrintBluetoothThermal.writeBytes(ticket);
-  //     print('result print, $result');
-  //   }
-  // }
+  onPrintCheckerBluetooth(bool reprint) async {
+    bool connectionStatus = await PrintBluetoothThermal.connectionStatus;
+    if (connectionStatus) {
+      bool result = false;
+      List<int> ticket = await printCheckerBluetooth(
+        cartSelected,
+        AppState().configPrinter,
+        AppState().configApplication,
+        reprint ? 'reprint' : null,
+      );
+      result = await PrintBluetoothThermal.writeBytes(ticket);
+      print('result print, $result');
+    }
+  }
 
-  // Future<List<int>> testTicket() async {
-  //   List<int> bytes = [];
-  //   // Using default profile
-  //   final profile = await CapabilityProfile.load();
-  //   final generator = Generator(PaperSize.mm80, profile);
-  //   //bytes += generator.setGlobalFont(PosFontType.fontA);
-  //   bytes += generator.reset();
+  Future<List<int>> testTicket() async {
+    List<int> bytes = [];
+    // Using default profile
+    final profile = await CapabilityProfile.load();
+    final generator = Generator(PaperSize.mm80, profile);
+    //bytes += generator.setGlobalFont(PosFontType.fontA);
+    bytes += generator.reset();
 
-  //   // final ByteData data = await rootBundle.load('assets/mylogo.jpg');
-  //   // final Uint8List bytesImg = data.buffer.asUint8List();
-  //   // img.Image? image = img.decodeImage(bytesImg);
+    // final ByteData data = await rootBundle.load('assets/mylogo.jpg');
+    // final Uint8List bytesImg = data.buffer.asUint8List();
+    // img.Image? image = img.decodeImage(bytesImg);
 
-  //   bytes += generator.text('Bold text', styles: const PosStyles(bold: true));
-  //   bytes +=
-  //       generator.text('Reverse text', styles: const PosStyles(reverse: true));
-  //   bytes += generator.text('Underlined text',
-  //       styles: const PosStyles(underline: true), linesAfter: 1);
-  //   bytes += generator.text('Align left',
-  //       styles: const PosStyles(align: PosAlign.left));
-  //   bytes += generator.text('Align center',
-  //       styles: const PosStyles(align: PosAlign.center));
-  //   bytes += generator.text('Align right',
-  //       styles: const PosStyles(align: PosAlign.right), linesAfter: 1);
+    bytes += generator.text('Bold text', styles: const PosStyles(bold: true));
+    bytes +=
+        generator.text('Reverse text', styles: const PosStyles(reverse: true));
+    bytes += generator.text('Underlined text',
+        styles: const PosStyles(underline: true), linesAfter: 1);
+    bytes += generator.text('Align left',
+        styles: const PosStyles(align: PosAlign.left));
+    bytes += generator.text('Align center',
+        styles: const PosStyles(align: PosAlign.center));
+    bytes += generator.text('Align right',
+        styles: const PosStyles(align: PosAlign.right), linesAfter: 1);
 
-  //   bytes += generator.row([
-  //     PosColumn(
-  //       text: 'col5',
-  //       width: 6,
-  //       styles: const PosStyles(align: PosAlign.left, underline: true),
-  //     ),
-  //     PosColumn(
-  //       text: 'col7',
-  //       width: 6,
-  //       styles: const PosStyles(align: PosAlign.right, underline: true),
-  //     ),
-  //   ]);
+    bytes += generator.row([
+      PosColumn(
+        text: 'col5',
+        width: 6,
+        styles: const PosStyles(align: PosAlign.left, underline: true),
+      ),
+      PosColumn(
+        text: 'col7',
+        width: 6,
+        styles: const PosStyles(align: PosAlign.right, underline: true),
+      ),
+    ]);
 
-  //   return bytes;
-  // }
+    return bytes;
+  }
   onCheckNewOrder() async {
   const Duration minOrderAge = Duration(minutes: 2);
 

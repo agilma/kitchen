@@ -87,6 +87,16 @@ class AppState extends ChangeNotifier {
         }
       }
     });
+    _safeInit(() {
+      if (prefs.containsKey('ff_configApplication')) {
+        try {
+          _configApplication =
+              json.decode(prefs.getString('ff_configApplication') ?? '');
+        } catch (e) {
+          print("Can't decode persisted json. Error: $e.");
+        }
+      }
+    });
 
     notifyListeners();
   }
@@ -148,6 +158,13 @@ class AppState extends ChangeNotifier {
     PrintBluetoothThermal.connect(
         macPrinterAddress: _value['selectedMacAddPrinter']);
     prefs.setString('ff_configPrinter', jsonEncode(_value));
+  }
+
+  dynamic _configApplication;
+  dynamic get configApplication => _configApplication;
+  set configApplication(dynamic _value) {
+    _configApplication = _value;
+    prefs.setString('ff_configApplication', jsonEncode(_value));
   }
 
   BluetoothInfo? _selectedPrinter;
