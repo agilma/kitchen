@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:kitchen/constants.dart';
-import 'package:kitchen/data/done_data.dart';
 import 'package:kitchen/screen/components/order_item.dart';
 
 class OrderCard extends StatefulWidget {
@@ -101,83 +100,85 @@ class _OrderCardState extends State<OrderCard> {
                       height: (isLandscape || isTablet) ? rowHeight : null, // Apply the height of the row if landscape or tablet
                       child: Card(
                         elevation: 8,
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                              color: OrderStatusColor,
-                              padding: const EdgeInsets.all(8.0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Flexible(
-                                        child: Text(
-                                          'Order - 00${order['queue']}',
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: isLandscape ? 22.0 : 28.0,
+                        child: SingleChildScrollView(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                color: OrderStatusColor,
+                                padding: const EdgeInsets.all(8.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Flexible(
+                                          child: Text(
+                                            'Order - 00${order['queue']}',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: isLandscape ? 20.0 : 24.0,
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                      Flexible(
-                                        child: Text(
-                                          '${order['time']}',
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: isLandscape ? 14.0 : 18.0,
+                                        Flexible(
+                                          child: Text(
+                                            '${order['time']}',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: isLandscape ? 12.0 : 16.0,
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
+                                      ],
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Flexible(
-                                        child: Text(
-                                          '${order['table']}',
-                                          style: TextStyle(
-                                            fontSize: isLandscape ? 14.0 : 16.0,
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Flexible(
+                                          child: Text(
+                                            '${order['table']}',
+                                            style: TextStyle(
+                                              fontSize: isLandscape ? 12.0 : 14.0,
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                      Flexible(
-                                        child: Text(
-                                          '${order['name']}',
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: isLandscape ? 14.0 : 16.0,
+                                        Flexible(
+                                          child: Text(
+                                            '${order['name']}',
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: isLandscape ? 12.0 : 14.0,
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                  const Divider(),
-                                  for (var item in order['items'])
-                                    if (widget.selectedCategory == 'All Station' ||
-                                        item['station'] == widget.selectedCategory)
-                                      OrderItem(
-                                        quantity: item['quantity'],
-                                        title: item['item'],
-                                        subtitle: item['description'],
-                                      ),
-                                ],
+                                      ],
+                                    ),
+                                    const Divider(),
+                                    for (var item in order['items'])
+                                      if (widget.selectedCategory == 'All Station' ||
+                                          item['station'] == widget.selectedCategory)
+                                        OrderItem(
+                                          quantity: item['quantity'],
+                                          title: item['item'],
+                                          subtitle: item['description'],
+                                        ),
+                                  ],
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                     ),
